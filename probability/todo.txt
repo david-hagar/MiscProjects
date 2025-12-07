@@ -1,0 +1,31 @@
+
+
+1. product and sum of random variables
+    a. effect on mean and variance
+2. convolution
+3. fit distribution
+4. sum of multiple and different distributions
+5. sample variance, central limit
+6. compare random variable stats to direct pd function generation
+
+random variables
+1. equal
+2. binomial
+3. power
+4.
+
+show mean and var on graph
+
+
+
+
+
+
+
+ <!--
+                             <arg> --add-exports=java.base/sun.net.util=ALL-UNNAMED</arg>
+                                <arg> --add-exports=java.management/sun.management=ALL-UNNAMED</arg>
+                                <arg> --add-exports=java.rmi/sun.rmi.registry-ALL-UNNAMED</arg>
+                                <arg> --add-exports=java.security.jgss/sun.security.krb5-ALL-UNNAMED</arg>
+                                -->
+

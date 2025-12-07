@@ -1,0 +1,183 @@
+
+
+
+binary files?
+extra open files?
+stats total time +6?
+
+
+
+Hash filter that takes multiple passes through the data finding branches with counts high enough to contain high frequency words
+the filter is a tree of hashes to counts. each node keeps a count and the last node is a hashmap of strings with actual counts
+if the hash is big enough the overlaps should be low and the distribution power law
+
+bloom counter
+
+
+
+
+
+
+-verbose:gc
+
+
+https://github.com/duckAsteroid/progress
+
+
+
+
+
+
+
+
+__________________
+
+private HeapNode rootNode;
+
+
+    public static interface HeapNode {
+        public Mergable peek();
+
+        public Mergable pull() throws IOException;
+
+        public void setParent(HeapNode node);
+    }
+
+    public static class MergeNode implements HeapNode {
+        protected HeapNode parent = null;
+        protected HeapNode left;
+        protected HeapNode right;
+        protected Mergable value;
+
+        public MergeNode(HeapNode left, HeapNode right) throws IOException {
+
+            this.left = left;
+            this.right = right;
+
+            if (left != null && right != null)
+                pullChildren(left.peek(), right.peek());
+        }
+
+        public Mergable peek() {
+            return value;
+        }
+
+
+        public Mergable pull() throws IOException {
+
+            if (value == null)
+                return null;
+
+            Mergable retValue = value;
+            final Mergable leftPeek = left.peek();
+            final Mergable rightPeek = right.peek();
+            if (leftPeek == null)
+                value = right.pull();
+            else if (rightPeek == null)
+                value = left.pull();
+            else pullChildren(leftPeek, rightPeek);
+
+            return retValue;
+        }
+
+        @Override
+        public void setParent(HeapNode node) {
+            this.parent = node;
+        }
+
+        private void pullChildren(Mergable leftPeek, Mergable rightPeek) throws IOException {
+            if (leftPeek.getKey().compareTo(rightPeek.getKey()) < 0)
+                value = left.pull();
+            else
+                value = right.pull();
+        }
+
+
+    }
+
+    public static class LeafNode implements HeapNode {
+        private HeapNode parent = null;
+        private final DataInputStream dis;
+        private final MergableIO mergableIO;
+        protected Mergable value;
+
+        public LeafNode(DataInputStream dis, MergableIO mergableIO) throws IOException {
+            this.dis = dis;
+            this.mergableIO = mergableIO;
+
+            try {
+                value = mergableIO.read(dis);
+            } catch (EOFException e) {
+                value = null;
+            }
+        }
+
+        public Mergable peek() {
+            return value;
+        }
+
+        public Mergable pull() throws IOException {
+            if (value == null)
+                return null;
+
+            Mergable retValue = value;
+            try {
+                value = mergableIO.read(dis);
+            } catch (EOFException e) {
+                value = null;
+                return null;
+            }
+
+            return retValue;
+        }
+
+        @Override
+        public void setParent(HeapNode node) {
+            this.parent = node;
+        }
+    }
+
+
+    private void init() throws IOException {
+        ArrayList<HeapNode> list = new ArrayList<>();
+
+        File[] files = workingFolder.listFiles();
+        if (files == null)
+            throw new IOException("listing working folder failed.");
+
+/*
+        Arrays.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return Long.compare(o1.length(), o2.length());
+            }
+        });
+*/
+
+        for (File file : files) {
+            DataInputStream dis = MergableIO.openIn(file);
+            list.add(new LeafNode(dis, mergableIO));
+        }
+
+        while (list.size() > 2) {
+            ArrayList<HeapNode> newList = new ArrayList<>();
+
+            while (list.size() > 1) {
+                HeapNode left = list.remove(list.size() - 1);
+                HeapNode right = list.remove(list.size() - 1);
+                HeapNode n = new MergeNode(left, right);
+                left.setParent(n);
+                right.setParent(n);
+                newList.add(n);
+            }
+            if (!list.isEmpty())
+                newList.addAll(list);
+
+            list = newList;
+        }
+
+        if (list.size() == 2) {
+            rootNode = new MergeNode(list.get(0), list.get(1));
+        } else
+            throw new IOException("Unexpected root on heap initialization");
+    }
