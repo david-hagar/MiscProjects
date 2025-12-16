@@ -1,4 +1,4 @@
-package com.davidhagar.gridphysics.functions.exp.t;
+package com.davidhagar.gridphysics.functions.testJson;
 
 public class Cat extends Animal {
     public int livesRemaining;

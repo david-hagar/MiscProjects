@@ -1,6 +1,9 @@
 package com.davidhagar.gridphysics.functions.exp.op;
 
 import com.davidhagar.gridphysics.State;
+import com.davidhagar.gridphysics.functions.exp.op.bin.Add;
+import com.davidhagar.gridphysics.functions.exp.op.leaf.Constant;
+import com.davidhagar.gridphysics.functions.exp.op.leaf.GridValue;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -19,5 +22,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = GridValue.class, name = "grid")
 })
 public interface Expression {
-    float[] eval(State[][] grid, int i, int j);
+    float eval(State[][] grid, int i, int j);
 }

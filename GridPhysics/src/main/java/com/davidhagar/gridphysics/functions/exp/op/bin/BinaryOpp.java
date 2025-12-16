@@ -1,18 +1,19 @@
-package com.davidhagar.gridphysics.functions.exp.op;
+package com.davidhagar.gridphysics.functions.exp.op.bin;
 
 import com.davidhagar.gridphysics.State;
+import com.davidhagar.gridphysics.functions.exp.op.Expression;
 
+public abstract class BinaryOpp implements Expression{
 
-public class Add implements Expression {
 
     Expression e1;
     Expression e2;
 
 
-    public Add() {
+    public BinaryOpp() {
     }
 
-    public Add(Expression e1, Expression e2) {
+    public BinaryOpp(Expression e1, Expression e2) {
         this.e1 = e1;
         this.e2 = e2;
     }
@@ -34,14 +35,9 @@ public class Add implements Expression {
         this.e2 = e2;
     }
 
-    @Override
-    public float[] eval(State[][] grid, int i, int j) {
-        return new float[0];
-    }
+    abstract public float eval(State[][] grid, int i, int j) ;
 
 
     @Override
-    public String toString() {
-        return "(" + e1 + " + " + e2 + ')';
-    }
+    abstract public String toString();
 }
