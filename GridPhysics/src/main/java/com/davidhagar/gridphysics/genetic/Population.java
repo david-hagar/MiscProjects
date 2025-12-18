@@ -5,6 +5,6 @@ import java.util.ArrayList;
 public interface Population {
 
     public GeneticObject select();
-    public void add(GeneticObject geneticObject);
-
-}
+    public GeneticObject add(GeneticObject geneticObject);
+    public int getMaxSize();
+    }

@@ -1,21 +1,23 @@
 package com.davidhagar.gridphysics.genetic;
 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class SimplePopulation implements Population {
 
     PriorityQueue<GeneticObject> population;
+    private final int populationMaxSize;
 
-    public SimplePopulation(int populationSize, Mutator initializer) {
-        population = new PriorityQueue<>(populationSize);
-
-        for (int i = 0; i < populationSize; i++) {
-            population.add(initializer.createNew());
-        }
+    public SimplePopulation(int populationMaxSize) {
+        this.populationMaxSize = populationMaxSize;
+        population = new PriorityQueue<>(populationMaxSize);
     }
 
 
     public GeneticObject select() {
+        if (population.size() == 0)
+            throw new NullPointerException("population is empty.");
+
         int rIndex = (int) Math.floor(Math.random() * population.size());
 
         int i = 0;
@@ -24,14 +26,26 @@ public class SimplePopulation implements Population {
                 return go;
         }
 
-        return null; // should not happen
+        throw new NullPointerException("select did not find."); // should not happen
     }
 
     @Override
-    public void add(GeneticObject geneticObject) {
+    public GeneticObject add(GeneticObject geneticObject) {
         population.add(geneticObject);
-        population.remove();
+
+        GeneticObject removed = null;
+        if (population.size() > populationMaxSize)
+            removed = population.remove();
+
+        return removed;
     }
 
 
+    public int getSize() {
+        return population.size();
+    }
+
+    public int getMaxSize() {
+        return populationMaxSize;
+    }
 }

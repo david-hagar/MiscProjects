@@ -5,11 +5,13 @@ import com.davidhagar.gridphysics.util.RandomUtil;
 
 import java.util.Objects;
 
+import static com.davidhagar.gridphysics.util.RandomUtil.rInt;
+
 public class WeaselGA {
 
 
     private static class StringGuess extends GeneticObject {
-        private String value;
+        private final String value;
 
 
         public StringGuess(String value) {
@@ -26,6 +28,14 @@ public class WeaselGA {
         @Override
         public int hashCode() {
             return Objects.hashCode(value);
+        }
+
+        @Override
+        public String toString() {
+            return "StringGuess{" +
+                    " fitness='" + getFitness() + '\'' +
+                    " value='" + value + '\'' +
+                    '}';
         }
     }
 
@@ -55,34 +65,46 @@ public class WeaselGA {
                     return new StringGuess(sg.value.substring(0, sg.value.length() - 1));
 
                 StringBuilder sb = new StringBuilder(sg.value);
-                sb.setCharAt(RandomUtil.rInt(0, sb.length() - 1), getRChar());
+                int pos = rInt(0, sb.length() - 1);
+                sb.setCharAt(pos, (char) (sb.charAt(pos) + rInt(-1, 1)));
 
                 return new StringGuess(sb.toString());
             }
         };
         FitnessFunction fitnessFunction = new FitnessFunction() {
             @Override
-            public void setFitness(GeneticObject geneticObject) {
+            public boolean setFitness(GeneticObject geneticObject) {
 
                 StringGuess sg = (StringGuess) geneticObject;
                 String v = sg.value;
                 int total = 0;
 
-                for (int i = 0; i < v.length(); i++) {
+                int minLength = Math.min(v.length(), goalString.length());
+                int maxLength = Math.max(v.length(), goalString.length());
+                total+= (maxLength - minLength) * ('~'-' ');
+                for (int i = 0; i < minLength ; i++) {
                     total += Math.abs(goalString.charAt(i) - v.charAt(i));
                 }
 
                 sg.setFitness(-total);
+                return total == 0;
             }
         };
-        Population population = new SimplePopulation(20, mutator);
+        Population population = new SimplePopulation(20);
         GeneticAlgorithm ga = new GeneticAlgorithm(mutator, fitnessFunction, population);
 
+        for (int i = 0; i < 1000; i++) {
+            if( ga.runTillDone(100)){
+                System.out.println("best = " + ga.getBest());
+                break;
+            }
+            System.out.println(ga.getIterationCount() + " best = " + ga.getBest());
+        }
 
     }
 
     private static char getRChar() {
-        return (char) RandomUtil.rInt(' ', '~');
+        return (char) rInt(' ', '~');
     }
 
 }
