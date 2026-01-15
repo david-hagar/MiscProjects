@@ -4,6 +4,8 @@ import com.davidhagar.gridphysics.GridStats;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.util.Util;
 
+import javax.swing.*;
+
 public class SimpleFunction implements StateFunction {
     @Override
     public State[][] getInitialGrid() {
@@ -35,5 +37,18 @@ public class SimpleFunction implements StateFunction {
     public int getRGB(State state, GridStats gridStats) {
         float[] v = state.values[0];
         return Util.convertRGBToInt((int) v[0], (int) v[1], (int) v[2]);
+    }
+
+    @Override
+    public int getStateSize() {
+        return 1;
+    }
+    public int getHistorySize(){
+        return 3;
+    }
+
+    @Override
+    public JPanel getControls() {
+        return new JPanel();
     }
 }

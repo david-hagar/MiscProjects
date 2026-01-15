@@ -3,30 +3,28 @@ package com.davidhagar.gridphysics.functions.exp.op.unary;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
 
-public class Square extends UnaryOpp {
+public class NoOpp extends UnaryOpp {
 
 
-    public Square() {
+    public NoOpp() {
     }
 
-    public Square(Expression e1){
-        super(e1);
+    public NoOpp(Expression e1) {
+        this.e1 = e1;
     }
 
 
     public float eval(State[][] grid, int i, int j) {
-        float eval1 = e1.eval(grid, i, j);
-        return eval1 * eval1;
+        return e1.eval(grid, i, j);
     }
 
     @Override
     public Expression copy() {
-        return new Square(e1);
+        return new NoOpp(e1);
     }
 
 
-    @Override
     public String toString() {
-        return "Sqr(" + e1 + " )";
+        return "NoOpp(" + e1 + " )";
     }
 }

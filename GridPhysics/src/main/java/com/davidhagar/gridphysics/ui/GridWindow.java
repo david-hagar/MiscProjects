@@ -42,6 +42,8 @@ public class GridWindow {
                 sim.start();
             }
         });
+
+        controls.add(sim.stateFunction.getControls());
     }
 
     private void createUIComponents() {

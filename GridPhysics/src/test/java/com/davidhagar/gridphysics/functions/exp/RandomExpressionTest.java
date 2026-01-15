@@ -27,16 +27,13 @@ public class RandomExpressionTest extends TestCase {
     }
 
     public void testRDouble() {
-
-
-
         int n = 10000000;
         double min = 99;
         double max = 0;
         int maxLimit = 2;
         int minLimit = -2;
         for (int i = 0; i < n; i++) {
-            double v = RandomUtil.rDouble(minLimit, maxLimit);
+            double v = RandomUtil.rFloat(minLimit, maxLimit);
             if (v < min) min = v;
             if (v > max) max = v;
 
@@ -46,7 +43,7 @@ public class RandomExpressionTest extends TestCase {
         System.out.println(max);
 
         Assert.assertTrue(min > minLimit);
-        Assert.assertTrue(max < +maxLimit);
+        Assert.assertTrue(max < maxLimit);
 
 
         Assert.assertEquals(minLimit, min, 1e-4);
@@ -56,12 +53,10 @@ public class RandomExpressionTest extends TestCase {
 
     public void testRandomExpression() {
 
-        RandomExpression re = new RandomExpression();
+        RandomExpression re = new RandomExpression(2, 3, 999);
 
         for (int i = 0; i < 20; i++) {
             System.out.println( re.randomExpression() );
         }
-
-
     }
 }

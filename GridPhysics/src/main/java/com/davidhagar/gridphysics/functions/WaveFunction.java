@@ -4,6 +4,7 @@ import com.davidhagar.gridphysics.GridStats;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.util.Util;
 
+import javax.swing.*;
 import java.awt.*;
 
 // https://www.google.com/search?q=how+to+implement+wave+in+a+descrete+2d+array&oq=how+to+implement+wave+in+a+descrete+2d+array&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKABMgkIAhAhGAoYoAEyCQgDECEYChigATIJCAQQIRgKGKABMgkIBRAhGAoYqwIyBwgGECEYjwLSAQkxNjMyN2owajeoAgCwAgA&sourceid=chrome&ie=UTF-8#sv=CBASnQMK9gIKBtrZ29IPABLrAgoMCgq62dvSDwQgATgDCoMBCoABwtnb0g96engiIHNnZV9tc2FmX21mb2phZDJSR3JHc3F0c1AwZW5LZ0FVMBJyRkImChNmZWVkYmFja19lbnRyeXBvaW50Eg9zZ2VfbXNhZl9hY3Rpb26qAQxNQUdJX0ZFQVRVUkWyAQwKABIEQkxVUhgAIACgAU7gAQHoAQH4AQEK1AEK0QHK2dvSD8oBEqUBIqIBL3NlYXJjaC9hYm91dC10aGlzLXJlc3VsdD9vcmlnaW49d3d3Lmdvb2dsZS5jb20mY3M9MSZyZXE9Q2dBU013b25DZ0lJY1FvaENGMWlIUW9NWTI5MWJuUnllVjl1WVcxbEVnMVZibWwwWldRZ1UzUmhkR1Z6RWdRS0FnaEhHZ0lJQUJvQUlnSVFBVWdCV0FCb0FBJmhsPWVuLVVTJmdsPVVTGhZodHRwczovL3d3dy5nb29nbGUuY29tWgBgAWgAcAB4ABIiYXRyaXRlbS1fbWZvamFkMlJHckdzcXRzUDBlbktnQVVfNxgvIIOJxusBMAI
@@ -11,6 +12,7 @@ import java.awt.*;
 
 public class WaveFunction implements StateFunction {
 
+    public static final int HISTORY_SIZE = 3;
     float CSquared = getCSquared();
     private static final boolean color = true;
 
@@ -29,7 +31,7 @@ public class WaveFunction implements StateFunction {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                values[i][j] = new State(1, 3);
+                values[i][j] = new State(1, HISTORY_SIZE);
             }
         }
 
@@ -99,7 +101,7 @@ public class WaveFunction implements StateFunction {
     @Override
     public int getRGB(State state, GridStats gridStats) {
         float[] v = state.values[0];
-        float iFloat = (v[0] - gridStats.min) / (gridStats.max - gridStats.min);
+        float iFloat = (v[0] - gridStats.min[0]) / (gridStats.max[0] - gridStats.min[0]);
         if( color){
             return Color.HSBtoRGB(iFloat, 1, 1);
         }
@@ -109,4 +111,20 @@ public class WaveFunction implements StateFunction {
         }
 
     }
+
+    @Override
+    public int getStateSize() {
+        return 1;
+    }
+
+    public int getHistorySize(){
+        return HISTORY_SIZE;
+    }
+
+
+    @Override
+    public JPanel getControls() {
+        return new JPanel();
+    }
+
 }

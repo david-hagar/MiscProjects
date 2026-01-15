@@ -7,8 +7,8 @@ public class State {
     public float[][] values;
 
 
-    public State(int size, int historySize) {
-        values = new float[historySize][size];
+    public State(int stateSize, int historySize) {
+        values = new float[historySize][stateSize];
     }
 
     public State(float[] value0,float[] value1,float[] value2) {

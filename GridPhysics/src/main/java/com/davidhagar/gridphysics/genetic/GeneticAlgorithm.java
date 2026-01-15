@@ -34,7 +34,7 @@ public class GeneticAlgorithm {
         boolean done = fitnessFunction.setFitness(mo);
         population.add(mo);
 
-        if(best == null || mo.compareTo(best) > 0)
+        if (best == null || mo.compareTo(best) > 0)
             best = mo;
 
         iterationCount++;
@@ -57,5 +57,18 @@ public class GeneticAlgorithm {
 
     public int getIterationCount() {
         return iterationCount;
+    }
+
+
+    public GeneticObject getNewManual() {
+        GeneticObject so = population.select();
+        GeneticObject mo = mutator.mutate(so);
+        return mo;
+    }
+
+    public void addRatedManual(GeneticObject ro){
+        if(Double.isNaN( ro.getFitness() ))
+            throw new NullPointerException("no fitness");
+        population.add(ro);
     }
 }

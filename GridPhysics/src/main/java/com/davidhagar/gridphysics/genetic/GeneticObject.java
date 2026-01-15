@@ -2,7 +2,7 @@ package com.davidhagar.gridphysics.genetic;
 
 public abstract class GeneticObject implements Comparable<GeneticObject> {
 
-    double fitness;
+    double fitness = Double.NaN;
 
     public GeneticObject() {
     }

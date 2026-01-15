@@ -8,7 +8,7 @@ public class WeightedRandomSelectorTest extends TestCase {
     public void test() {
 
 
-        WeightedRandomSelector<Integer> selector = new WeightedRandomSelector<>();
+        WeightedRandomSelector<Integer> selector = new WeightedRandomSelector<>(999);
         selector.add(0, 1.0);
         selector.add(2, 3.0);
         selector.add(1, 2.0);

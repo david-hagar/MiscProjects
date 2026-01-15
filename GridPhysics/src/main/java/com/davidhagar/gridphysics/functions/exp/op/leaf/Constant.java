@@ -1,9 +1,11 @@
 package com.davidhagar.gridphysics.functions.exp.op.leaf;
 
 import com.davidhagar.gridphysics.State;
+import com.davidhagar.gridphysics.functions.exp.ga.ExpressionMutator;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
+import com.davidhagar.gridphysics.functions.exp.op.ExpressionVisitor;
 
-public class Constant implements Expression {
+public class Constant extends LeafOpp {
 
     float value;
 
@@ -32,5 +34,19 @@ public class Constant implements Expression {
     @Override
     public String toString() {
         return Float.toString(value);
+    }
+
+    public Expression copy(){
+        return new Constant(value);
+    }
+
+    public void walkVisitor(ExpressionVisitor visitor, Expression parent){
+        visitor.visit(this, parent);
+    }
+
+    @Override
+    public boolean mutate(ExpressionMutator.EMSettings settings) {
+       value = settings.changeFloatAndSign(value);
+       return true;
     }
 }

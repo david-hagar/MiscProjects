@@ -26,4 +26,7 @@ public class Sub extends BinaryOpp {
         return "(" + e1 + " - " + e2 + ')';
     }
 
+    public Expression copy(){
+        return new Sub(e1.copy(), e2.copy());
+    }
 }

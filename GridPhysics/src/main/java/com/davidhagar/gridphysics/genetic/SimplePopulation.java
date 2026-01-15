@@ -1,5 +1,7 @@
 package com.davidhagar.gridphysics.genetic;
 
+import com.davidhagar.gridphysics.util.RandomUtil;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -15,10 +17,10 @@ public class SimplePopulation implements Population {
 
 
     public GeneticObject select() {
-        if (population.size() == 0)
+        if (population.isEmpty())
             throw new NullPointerException("population is empty.");
 
-        int rIndex = (int) Math.floor(Math.random() * population.size());
+        int rIndex = (int) Math.floor(RandomUtil.random.nextFloat() * population.size());
 
         int i = 0;
         for (GeneticObject go : population) {

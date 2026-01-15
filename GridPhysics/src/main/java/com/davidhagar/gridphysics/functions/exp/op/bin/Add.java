@@ -1,6 +1,7 @@
 package com.davidhagar.gridphysics.functions.exp.op.bin;
 
 import com.davidhagar.gridphysics.State;
+import com.davidhagar.gridphysics.functions.exp.ga.ExpressionMutator;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
 
 
@@ -24,5 +25,11 @@ public class Add extends BinaryOpp {
     public String toString() {
         return "(" + e1 + " + " + e2 + ')';
     }
+
+
+    public Expression copy(){
+        return new Add(e1.copy(), e2.copy());
+    }
+
 
 }

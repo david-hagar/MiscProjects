@@ -27,4 +27,7 @@ public class Div extends BinaryOpp {
         return "(" + e1 + " / " + e2 + ')';
     }
 
+    public Expression copy(){
+        return new Div(e1.copy(), e2.copy());
+    }
 }

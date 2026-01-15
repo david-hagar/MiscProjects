@@ -27,4 +27,8 @@ public class Mult extends BinaryOpp {
         return "(" + e1 + " * " + e2 + ')';
     }
 
+
+    public Expression copy(){
+        return new Mult(e1.copy(), e2.copy());
+    }
 }

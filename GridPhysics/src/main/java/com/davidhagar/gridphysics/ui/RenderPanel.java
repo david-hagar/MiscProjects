@@ -1,27 +1,28 @@
 package com.davidhagar.gridphysics.ui;
 
-import com.davidhagar.gridphysics.Grid;
+import com.davidhagar.gridphysics.GridContainer;
 import com.davidhagar.gridphysics.GridStats;
 import com.davidhagar.gridphysics.Sim;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class RenderPanel extends JPanel {
 
 
-    private final Grid grid;
+    private final GridContainer gridContainer;
     private final Sim sim;
     private BufferedImage image;
     private int loopCountCopy = 0;
     private GridStats gridStats;
 
     public RenderPanel(Sim sim) {
-        this.grid = sim.grid;
+        this.gridContainer = sim.gridContainer;
         this.sim = sim;
 
-        int[] size = grid.getSize();
+        int[] size = gridContainer.getSize();
         image = new BufferedImage(size[0], size[1],BufferedImage.TYPE_INT_RGB);
 
     }
@@ -58,8 +59,8 @@ public class RenderPanel extends JPanel {
             g2d.drawImage(image, x, y, scaledWidth, scaledHeight, this);
             g2d.setColor(Color.RED.darker());
             g2d.drawString( Integer.toString( loopCountCopy), 10,100);
-            g2d.drawString( "min = " +  gridStats.min, 10,130);
-            g2d.drawString( "max = " + gridStats.max, 10,160);
+            g2d.drawString( "min = " + Arrays.toString( gridStats.min ), 10,130);
+            g2d.drawString( "max = " + Arrays.toString( gridStats.max ), 10,160);
         }
 
 
@@ -68,11 +69,11 @@ public class RenderPanel extends JPanel {
     private void updateImage() {
         synchronized (sim) {
             gridStats = sim.getStats();
-            int length = grid.grid.length;
+            int length = gridContainer.grid.length;
             for (int i = 0; i < length; i++) {
-                int length2 = grid.grid[0].length;
+                int length2 = gridContainer.grid[0].length;
                 for (int j = 0; j < length2; j++) {
-                    image.setRGB(i, j, sim.stateFunction.getRGB(grid.grid[i][j], gridStats));
+                    image.setRGB(i, j, sim.stateFunction.getRGB(gridContainer.grid[i][j], gridStats));
                     //grid.grid[i][j]
                 }
             }

@@ -1,6 +1,7 @@
 package com.davidhagar.gridphysics.functions.exp.op;
 
 import com.davidhagar.gridphysics.State;
+import com.davidhagar.gridphysics.functions.exp.ga.ExpressionMutator;
 import com.davidhagar.gridphysics.functions.exp.op.bin.Add;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.Constant;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.GridValue;
@@ -23,4 +24,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public interface Expression {
     float eval(State[][] grid, int i, int j);
+    void walkVisitor(ExpressionVisitor visitor, Expression parent);
+    Expression copy();
+    void replaceChild(Expression toReplace, Expression replacementValue);
+    boolean mutate(ExpressionMutator.EMSettings settings);
 }
