@@ -1,6 +1,6 @@
 package com.davidhagar.gridphysics.functions.exp.ga;
 
-import com.davidhagar.gridphysics.Sim;
+import com.davidhagar.gridphysics.functions.StateFunction;
 import com.davidhagar.gridphysics.functions.exp.RandomExpression;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
 import com.davidhagar.gridphysics.functions.exp.op.ExpressionVisitor;
@@ -45,14 +45,14 @@ public class ExpressionMutator {
     RandomExpression randomExpression;
 
 
-    public ExpressionMutator(Sim sim) {
+    public ExpressionMutator(StateFunction stateFunction, long randomSeed) {
         EMSettings ems = new EMSettings();
 
-        randomExpression = new RandomExpression(sim.stateFunction.getStateSize(), sim.stateFunction.getHistorySize(), sim.randomSeed);
+        randomExpression = new RandomExpression(stateFunction.getStateSize(), stateFunction.getHistorySize(), randomSeed);
 
-        unarySelector = new WeightedRandomSelector<Mutator>(sim.randomSeed);
-        leafSelector = new WeightedRandomSelector<Mutator>(sim.randomSeed);
-        binarySelector = new WeightedRandomSelector<Mutator>(sim.randomSeed);
+        unarySelector = new WeightedRandomSelector<Mutator>(randomSeed);
+        leafSelector = new WeightedRandomSelector<Mutator>(randomSeed);
+        binarySelector = new WeightedRandomSelector<Mutator>(randomSeed);
 
         unarySelector.add(new Mutator() {
             @Override

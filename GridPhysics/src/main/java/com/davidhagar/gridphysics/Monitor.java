@@ -1,5 +1,6 @@
 package com.davidhagar.gridphysics;
 
+import com.davidhagar.gridphysics.functions.exp.ExpressionFunction;
 import com.davidhagar.gridphysics.util.ArrayMath;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,28 +19,33 @@ public class Monitor {
     }
 
 
+    public void setStatus(String status){
+        System.out.println(status);
+        Sim.getInstance().status = status;
+    }
+
     public void checkForExit(GridStats gridStats) {
         int minMaxEqualCount = 0;
 
         int stateSize = sim.stateFunction.getStateSize();
         for (int s = 0; s < stateSize; s++) {
             if (Float.isNaN(gridStats.min[s])) {
-                System.out.println("gridStats.min[" + s + "] is NaN");
+                setStatus("gridStats.min[" + s + "] is NaN");
                 sim.stop();
             } else if (Float.isNaN(gridStats.max[s])) {
-                System.out.println("gridStats.max[" + s + "] is NaN");
+                setStatus("gridStats.max[" + s + "] is NaN");
                 sim.stop();
             } else if (Float.isInfinite(gridStats.min[s])) {
-                System.out.println("gridStats.min[" + s + "] is Infinite");
+                setStatus("gridStats.min[" + s + "] is Infinite");
                 sim.stop();
             } else if (Float.isInfinite(gridStats.max[s])) {
-                System.out.println("gridStats.max[" + s + "] is Infinite");
+                setStatus("gridStats.max[" + s + "] is Infinite");
                 sim.stop();
             } else if (Math.abs(gridStats.min[s]) > MAX_Value) {
-                System.out.println("gridStats.min[" + s + "] >  " + MAX_Value);
+                setStatus("gridStats.min[" + s + "] >  " + MAX_Value);
                 sim.stop();
             } else if (Math.abs(gridStats.max[s]) > MAX_Value) {
-                System.out.println("gridStats.max[" + s + "] > " + MAX_Value);
+                setStatus("gridStats.max[" + s + "] > " + MAX_Value);
                 sim.stop();
             } else if (gridStats.min[s] == gridStats.max[s]) {
                 minMaxEqualCount++;
@@ -48,7 +54,7 @@ public class Monitor {
         }
 
         if (minMaxEqualCount == stateSize) {
-            System.out.println("min == max");
+            setStatus("min == max");
             sim.stop();
         }
 
@@ -79,4 +85,15 @@ public class Monitor {
     }
 
 
+    public void processStop() {
+        if(sim.getLoopCount() < 50 ){
+            if(sim.stateFunction instanceof ExpressionFunction){
+                ExpressionFunction ef = (ExpressionFunction) sim.stateFunction;
+                ef.rate(0);
+            }
+
+        }
+
+        history.clear();
+    }
 }

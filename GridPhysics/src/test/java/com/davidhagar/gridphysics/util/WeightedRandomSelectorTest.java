@@ -1,10 +1,13 @@
 package com.davidhagar.gridphysics.util;
 
-import junit.framework.TestCase;
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class WeightedRandomSelectorTest extends TestCase {
+public class WeightedRandomSelectorTest {
 
+    @Test
+    @DisplayName("")
     public void test() {
 
 
@@ -15,7 +18,7 @@ public class WeightedRandomSelectorTest extends TestCase {
 
         int[] c = new int[3];
 
-        int n = 100*1000*1000;
+        int n = 100 * 1000 * 1000;
         for (int i = 0; i < n; i++) {
             int index = selector.selectRandomObject();
             c[index]++;
@@ -24,9 +27,9 @@ public class WeightedRandomSelectorTest extends TestCase {
         for (int i = 0; i < c.length; i++) {
             double prob = c[i] / (double) n;
             double expectedProb = (i + 1) / selector.getTotalWeight();
-            System.out.println(i + " = " + c[i] + " ( p = " + prob + " expected = " + expectedProb + " err = " + (prob-expectedProb) + ")");
+            System.out.println(i + " = " + c[i] + " ( p = " + prob + " expected = " + expectedProb + " err = " + (prob - expectedProb) + ")");
 
-            Assert.assertEquals(expectedProb, prob, 0.001);
+            assertEquals(expectedProb, prob, 0.001);
         }
     }
 }

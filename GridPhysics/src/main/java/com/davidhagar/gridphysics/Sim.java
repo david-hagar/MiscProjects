@@ -7,7 +7,7 @@ import com.davidhagar.gridphysics.functions.exp.ExpressionFunction;
 
 public class Sim {
 
-    public static final int loopDelay = 500;
+    public static final int loopDelay = 100;
     private static Sim globalInstance = null;
 
     private final Monitor monitor;
@@ -18,6 +18,7 @@ public class Sim {
     private int loopCount = 0;
     private int paintDelay = 4;
     public long randomSeed = 123456789;
+    public String status = "";
 
     public Sim(StateFunction stateFunction) {
 
@@ -42,7 +43,7 @@ public class Sim {
     }
 
     public static Sim makeExpression() {
-        ExpressionFunction f = new ExpressionFunction(1, 3, 999);
+        ExpressionFunction f = new ExpressionFunction(2, 3, 999);
         return new Sim(f);
     }
 
@@ -74,7 +75,9 @@ public class Sim {
         if (thread != null)
             return;
 
+        status = "Running ...";
         thread = new Thread(() -> {
+            System.out.println("Sim thread started." + thread);
             while (!Thread.currentThread().isInterrupted()) {
                 for (int i = 0; i < paintDelay; i++) {
                     runOneStep();
@@ -88,7 +91,9 @@ public class Sim {
                     }
                 loopListener.run();
             }
+            System.out.println("Sim thread done." + thread);
             thread = null;
+            monitor.processStop();
         });
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
@@ -97,7 +102,15 @@ public class Sim {
 
     public void stop() {
         if (thread != null)
+        {
             thread.interrupt();
+            try {
+                thread.join(5000);
+            } catch (InterruptedException e) {
+                System.out.println("failed to exit.");
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
@@ -140,4 +153,17 @@ public class Sim {
     }
 
 
+    public void reset() {
+        stop();
+        gridContainer.reset();
+        loopCount = 0;
+
+        start();
+    }
+
+
+
+    public boolean isRunning(){
+        return thread != null;
+    }
 }

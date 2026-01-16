@@ -68,7 +68,6 @@ public class GridWindow {
         frame.setBackground(Color.BLACK);
         centerFrame(frame, 50);
         frame.setVisible(true);
-
-
     }
+
 }

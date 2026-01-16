@@ -16,6 +16,9 @@ public class RandomUtil {
     }
 
     public static int rChangeLimit(int value, int min, int max) {
+        if( min == max)
+            return min;
+
         int v = rChange(value);
         if (v > max)
             v = max;
@@ -25,6 +28,9 @@ public class RandomUtil {
     }
 
     public static int rChangeLimitExclude(int value, int min, int max) {
+        if( min == max)
+            return min;
+
         while (true) {
             int i = rChangeLimit(value, min, max);
             if (i != value)
@@ -33,6 +39,9 @@ public class RandomUtil {
     }
 
     public static int rIntExclude(int exclude, int min, int max) {
+        if( min == max)
+            return min;
+
         while (true) {
             int v = rInt(min, max);
             if (v != exclude)

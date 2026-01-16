@@ -5,3 +5,6 @@ optimize Sim.getStats
 
 
 mutate wave function
+
+
+Select in ga favors high scores

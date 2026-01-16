@@ -1,9 +1,15 @@
 package com.davidhagar.gridphysics.functions.exp;
 
 import com.davidhagar.gridphysics.GridStats;
+import com.davidhagar.gridphysics.Sim;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.functions.StateFunction;
+import com.davidhagar.gridphysics.functions.exp.ga.ExpressionGA;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
+import com.davidhagar.gridphysics.functions.exp.op.bin.Mult;
+import com.davidhagar.gridphysics.functions.exp.op.bin.Sub;
+import com.davidhagar.gridphysics.functions.exp.op.leaf.Constant;
+import com.davidhagar.gridphysics.functions.exp.op.leaf.GridValue;
 import com.davidhagar.gridphysics.util.RandomUtil;
 import com.davidhagar.gridphysics.util.Util;
 
@@ -18,18 +24,24 @@ public class ExpressionFunction implements StateFunction {
     final int stateSize;
     final int historySize;
     Expression[] stateFunction;
-    float[] tmpScaled ;
+    float[] tmpScaled;
+
+    ExpressionGA expressionGA;
+    private RatePanel ratePanel;
 
     public ExpressionFunction(int stateSize, int historySize, long seed) {
         this.stateSize = stateSize;
         this.historySize = historySize;
 
         tmpScaled = new float[stateSize];
-        stateFunction = new Expression[stateSize];
 
         RandomExpression re = new RandomExpression(stateSize, historySize, seed);
-        for (int s = 0; s < this.stateSize; s++)
-            stateFunction[s] = re.randomExpression();
+
+        expressionGA = new ExpressionGA(this, seed);
+        stateFunction = expressionGA.getNext();
+        ratePanel = new RatePanel(this);
+        updateExpressionDisplay();
+
     }
 
     @Override
@@ -85,15 +97,13 @@ public class ExpressionFunction implements StateFunction {
         } else if (stateSize == 2) {
             scaleMinMax(gridStats, state.values[0], tmpScaled);
             return Color.HSBtoRGB(tmpScaled[0], 1, tmpScaled[1]);
-        }
-        else if (stateSize == historySize) {
+        } else if (stateSize == historySize) {
             scaleMinMax(gridStats, state.values[0], tmpScaled);
-            int r = (int)(tmpScaled[0] * 255);
-            int g = (int)(tmpScaled[1] * 255);
-            int b = (int)(tmpScaled[2] * 255);
+            int r = (int) (tmpScaled[0] * 255);
+            int g = (int) (tmpScaled[1] * 255);
+            int b = (int) (tmpScaled[2] * 255);
             return 0xff000000 | (r << 16) | (g << 8) | b;
-        }
-        else throw new RuntimeException("not implemented stateSize = " + stateSize);
+        } else throw new RuntimeException("not implemented stateSize = " + stateSize);
     }
 
     private static float scaleMinMaxS(GridStats gridStats, float v) {
@@ -111,21 +121,71 @@ public class ExpressionFunction implements StateFunction {
         return stateSize;
     }
 
-    public int getHistorySize(){
+    public int getHistorySize() {
         return historySize;
     }
 
 
     @Override
     public JPanel getControls() {
-        return new JPanel();
+        return ratePanel;
     }
 
     public void rate(float score) {
+        expressionGA.storeExpression(stateFunction, score);
+        Sim.getInstance().stop();
 
+        stateFunction = expressionGA.getNext();
+        updateExpressionDisplay();
+        Sim.getInstance().reset();
+        Sim.getInstance().start();
+    }
+
+    private void updateExpressionDisplay() {
+        StringBuilder sb = new StringBuilder(500);
+        for (int i = 0; i < stateFunction.length; i++) {
+            sb.append(stateFunction[i].toString());
+            if (i != stateFunction.length - 1)
+                sb.append("\n");
+        }
+        ratePanel.setExpression(sb.toString());
     }
 
     public void save() {
 
     }
+
+
+    Expression getWaveFunction() {
+
+        //        float[][] values = grid[i][j].values;
+        //        values[0][0] = 2 * values[1][0] - values[2][0] +
+        //                CSquared * (grid[iP1][j].values[1][0] + grid[iM1][j].values[1][0] +
+        //                        grid[i][jP1].values[1][0] + grid[i][jM1].values[1][0] -
+        //                        4 * values[1][0]);
+
+        Expression e1 = new Sub(
+                new Mult(
+                        new Constant(2), new GridValue(0, 0, 2, 0)),
+                new GridValue(0, 0, 2, 0)
+        );
+
+
+        return null;
+    }
+
+
+    private static float getCSquared() {
+        float c = 1.0f; // Wave speed
+        float dt = 0.5f; // Time step
+        float dx = 1.0f; // Spatial step (assuming dx = dy)
+        float C = (c * dt / dx);
+        float CSquared = C * C;
+
+        System.out.println("CSquared = " + CSquared);
+        System.out.println("1/sqrt(2) = " + 1 / Math.sqrt(2));
+        return CSquared;
+    }
+
+
 }

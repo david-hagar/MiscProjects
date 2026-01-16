@@ -60,7 +60,7 @@ public class GeneticAlgorithm {
     }
 
 
-    public GeneticObject getNewManual() {
+    public GeneticObject getNextManual() {
         GeneticObject so = population.select();
         GeneticObject mo = mutator.mutate(so);
         return mo;

@@ -17,8 +17,8 @@ import static com.davidhagar.gridphysics.util.RandomUtil.rInt;
 
 public class RandomExpression {
 
-    int maxLeafCount = 7;
-    int minLeafCount = 2;
+    int maxLeafCount = 3;
+    int minLeafCount = 1;
     int maxUnary = 2;
     int stateMax;
     int historyMax;
@@ -57,7 +57,7 @@ public class RandomExpression {
         leafSelector.add(new ExpGen() {
             @Override
             public Expression getInstance() {
-                return new GridValue(rInt(-2, 2), rInt(-2, 2), rInt(0, stateMax - 1), rInt(1, historyMax - 1));
+                return new GridValue(rInt(-2, 2), rInt(-2, 2), rInt(1, historyMax - 1), rInt(0, stateMax - 1));
             }
         }, 2.0);
 
@@ -109,7 +109,7 @@ public class RandomExpression {
     }
 
 
-    public Expression randomExpression() {
+    public Expression getRandomExpression() {
 
         int leafCount = rInt(minLeafCount, maxLeafCount);
         Expression[] leafs = new Expression[leafCount];
@@ -160,5 +160,14 @@ public class RandomExpression {
 
     public Expression newLeaf() {
         return leafSelector.selectRandomObject().getInstance();
+    }
+
+    public Expression[] getNExpressions(int n){
+        Expression [] expressions = new Expression[n];
+        for (int i = 0; i < n; i++) {
+            expressions[i] = getRandomExpression();
+        }
+
+        return expressions;
     }
 }

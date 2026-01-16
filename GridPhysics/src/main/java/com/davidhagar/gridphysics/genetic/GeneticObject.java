@@ -7,6 +7,10 @@ public abstract class GeneticObject implements Comparable<GeneticObject> {
     public GeneticObject() {
     }
 
+    public GeneticObject(double fitness) {
+        this.fitness = fitness;
+    }
+
     public double getFitness() {
         return fitness;
     }
@@ -16,11 +20,11 @@ public abstract class GeneticObject implements Comparable<GeneticObject> {
     }
 
 
-    @Override
-    public abstract boolean equals(Object o);
-
-    @Override
-    public abstract int hashCode();
+//    @Override
+//    public abstract boolean equals(Object o);
+//
+//    @Override
+//    public abstract int hashCode();
 
 
     @Override

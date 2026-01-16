@@ -57,10 +57,15 @@ public class RenderPanel extends JPanel {
 
             // Draw the scaled image
             g2d.drawImage(image, x, y, scaledWidth, scaledHeight, this);
-            g2d.setColor(Color.RED.darker());
-            g2d.drawString( Integer.toString( loopCountCopy), 10,100);
-            g2d.drawString( "min = " + Arrays.toString( gridStats.min ), 10,130);
-            g2d.drawString( "max = " + Arrays.toString( gridStats.max ), 10,160);
+            g2d.setColor(new Color(255,150,150));
+            int spacing = 30;
+            int offset = 100;
+            g2d.drawString( Integer.toString( loopCountCopy), 10,offset);
+            g2d.drawString( "min = " + Arrays.toString( gridStats.min ), 10,offset + spacing);
+            g2d.drawString( "max = " + Arrays.toString( gridStats.max ), 10,offset + spacing *2);
+            g2d.setColor(new Color(255,200,200));
+            g2d.drawString( Sim.getInstance().isRunning()? "Running":"Stopped", 10,offset + spacing *4);
+            g2d.drawString( Sim.getInstance().status, 10,offset + spacing *5);
         }
 
 
@@ -82,4 +87,6 @@ public class RenderPanel extends JPanel {
         }
 
     }
+
+
 }

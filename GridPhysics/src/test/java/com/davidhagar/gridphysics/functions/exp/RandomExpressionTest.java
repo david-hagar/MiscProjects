@@ -1,11 +1,16 @@
 package com.davidhagar.gridphysics.functions.exp;
 
 import com.davidhagar.gridphysics.util.RandomUtil;
-import junit.framework.TestCase;
-import org.junit.Assert;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class RandomExpressionTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+public class RandomExpressionTest {
+
+    @Test
+    @DisplayName("")
     public void testRInt() {
 
         int n = 1000;
@@ -21,11 +26,13 @@ public class RandomExpressionTest extends TestCase {
         System.out.println(min);
         System.out.println(max);
 
-        Assert.assertEquals(-2, min);
-        Assert.assertEquals(2, max);
+        assertEquals(-2, min);
+        assertEquals(2, max);
 
     }
 
+    @Test
+    @DisplayName("")
     public void testRDouble() {
         int n = 10000000;
         double min = 99;
@@ -42,21 +49,23 @@ public class RandomExpressionTest extends TestCase {
         System.out.println(min);
         System.out.println(max);
 
-        Assert.assertTrue(min > minLimit);
-        Assert.assertTrue(max < maxLimit);
+        assertTrue(min > minLimit);
+        assertTrue(max < maxLimit);
 
 
-        Assert.assertEquals(minLimit, min, 1e-4);
-        Assert.assertEquals(maxLimit, max, 1e-4);
+        assertEquals(minLimit, min, 1e-4);
+        assertEquals(maxLimit, max, 1e-4);
 
     }
 
-    public void testRandomExpression() {
+    @Test
+    @DisplayName("")
+    public void testGetRandomExpression() {
 
         RandomExpression re = new RandomExpression(2, 3, 999);
 
         for (int i = 0; i < 20; i++) {
-            System.out.println( re.randomExpression() );
+            System.out.println(re.getRandomExpression());
         }
     }
 }

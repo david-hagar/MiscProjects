@@ -58,7 +58,7 @@ public class GridValue extends LeafOpp {
     public GridValue() {
     }
 
-    public GridValue(int iOffset, int jOffset, int stateIndex, int historyIndex) {
+    public GridValue(int iOffset, int jOffset, int historyIndex, int stateIndex) {
         this.iOffset = iOffset;
         this.jOffset = jOffset;
         this.stateIndex = stateIndex;
@@ -125,7 +125,7 @@ public class GridValue extends LeafOpp {
     }
 
     public Expression copy() {
-        return new GridValue(iOffset, jOffset, stateIndex, historyIndex);
+        return new GridValue(iOffset, jOffset, historyIndex, stateIndex);
     }
 
     public boolean mutate(ExpressionMutator.EMSettings settings) {
