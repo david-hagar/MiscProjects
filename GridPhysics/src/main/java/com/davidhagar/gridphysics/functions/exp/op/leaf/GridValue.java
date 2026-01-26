@@ -44,7 +44,7 @@ public class GridValue extends LeafOpp {
             @Override
             public void change(GridValue gv) {
                 int historySize = Sim.getInstance().stateFunction.getHistorySize();
-                gv.historyIndex = RandomUtil.rChangeLimitExclude(gv.historyIndex, 0, historySize - 1);
+                gv.historyIndex = RandomUtil.rChangeLimitExclude(gv.historyIndex, 1, historySize - 1);
             }
         });
 

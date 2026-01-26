@@ -5,6 +5,7 @@ import com.davidhagar.gridphysics.Sim;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.functions.StateFunction;
 import com.davidhagar.gridphysics.functions.exp.ga.ExpressionGA;
+import com.davidhagar.gridphysics.functions.exp.io.ExpressionContainer;
 import com.davidhagar.gridphysics.functions.exp.op.Expression;
 import com.davidhagar.gridphysics.functions.exp.op.bin.Mult;
 import com.davidhagar.gridphysics.functions.exp.op.bin.Sub;
@@ -15,6 +16,8 @@ import com.davidhagar.gridphysics.util.Util;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class ExpressionFunction implements StateFunction {
@@ -42,6 +45,7 @@ public class ExpressionFunction implements StateFunction {
         ratePanel = new RatePanel(this);
         updateExpressionDisplay();
 
+        load();
     }
 
     @Override
@@ -132,13 +136,16 @@ public class ExpressionFunction implements StateFunction {
     }
 
     public void rate(float score) {
-        expressionGA.storeExpression(stateFunction, score);
-        Sim.getInstance().stop();
+        Sim.getInstance().runInMainLoop(new Runnable() {
+            @Override
+            public void run() {
+                expressionGA.storeExpression(stateFunction, score);
 
-        stateFunction = expressionGA.getNext();
-        updateExpressionDisplay();
-        Sim.getInstance().reset();
-        Sim.getInstance().start();
+                stateFunction = expressionGA.getNext();
+                updateExpressionDisplay();
+                Sim.getInstance().reset();
+            }
+        });
     }
 
     private void updateExpressionDisplay() {
@@ -151,10 +158,26 @@ public class ExpressionFunction implements StateFunction {
         ratePanel.setExpression(sb.toString());
     }
 
-    public void save() {
-
+    public void save() throws IOException {
+        expressionGA.getPopulation().toExpressionContainer().save(getFile());
+        System.out.println("saved.");
     }
 
+    private File getFile() {
+        return new File("./save.json");
+    }
+
+    public void load() {
+        File file = getFile();
+        if (file.exists()) {
+            try {
+                expressionGA.getPopulation().setPopulation(ExpressionContainer.load(file));
+                System.out.println("Loaded.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     Expression getWaveFunction() {
 
@@ -187,5 +210,8 @@ public class ExpressionFunction implements StateFunction {
         return CSquared;
     }
 
-
+    @Override
+    public void registerFault() {
+        rate(0);
+    }
 }

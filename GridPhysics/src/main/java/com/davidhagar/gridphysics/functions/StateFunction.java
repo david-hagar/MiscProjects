@@ -7,13 +7,15 @@ import javax.swing.*;
 
 public interface StateFunction {
 
-    State[][] getInitialGrid();
+    public State[][] getInitialGrid();
 
-    void update(State[][] grid, int i, int j);
+    public void update(State[][] grid, int i, int j);
 
     public int getRGB(State state, GridStats gridStats);
 
     public int getStateSize();
     public int getHistorySize();
     public JPanel getControls();
+
+    public void registerFault();
 }

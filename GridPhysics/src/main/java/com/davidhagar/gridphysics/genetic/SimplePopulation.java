@@ -1,7 +1,11 @@
 package com.davidhagar.gridphysics.genetic;
 
+import com.davidhagar.gridphysics.functions.exp.ga.ExpressionGO;
+import com.davidhagar.gridphysics.functions.exp.io.ExpressionContainer;
 import com.davidhagar.gridphysics.util.RandomUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -40,6 +44,20 @@ public class SimplePopulation implements Population {
             removed = population.remove();
 
         return removed;
+    }
+
+    public ExpressionContainer toExpressionContainer(){
+        ArrayList<ExpressionGO> list = new ArrayList<ExpressionGO>();
+        for(GeneticObject o :population)
+            list.add((ExpressionGO) o);
+
+
+        return new ExpressionContainer(list);
+    }
+
+    public void setPopulation(ExpressionContainer ec){
+        population.clear();
+        population.addAll(ec.getExpressions());
     }
 
 

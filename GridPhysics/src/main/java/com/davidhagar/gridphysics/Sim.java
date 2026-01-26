@@ -5,6 +5,8 @@ import com.davidhagar.gridphysics.functions.StateFunction;
 import com.davidhagar.gridphysics.functions.WaveFunction;
 import com.davidhagar.gridphysics.functions.exp.ExpressionFunction;
 
+import java.util.ArrayList;
+
 public class Sim {
 
     public static final int loopDelay = 100;
@@ -19,6 +21,8 @@ public class Sim {
     private int paintDelay = 4;
     public long randomSeed = 123456789;
     public String status = "";
+    private final ArrayList<Runnable> loopRunnables = new ArrayList<>();
+    private final ArrayList<Runnable> loopRunnables2 = new ArrayList<>();
 
     public Sim(StateFunction stateFunction) {
 
@@ -26,11 +30,14 @@ public class Sim {
         this.stateFunction = stateFunction;
         this.monitor = new Monitor(this);
 
-        if(globalInstance != null)
+        if (globalInstance != null)
             throw new NullPointerException("One instance allowed.");
 
         globalInstance = this;
     }
+
+
+
 
     public static Sim makeSimple() {
         SimpleFunction f = new SimpleFunction();
@@ -51,7 +58,23 @@ public class Sim {
         return globalInstance;
     }
 
+    public void runInMainLoop(Runnable r){
+       synchronized (loopRunnables) {
+           loopRunnables.add(r);
+       }
+    }
+
     public void runOneStep() {
+       synchronized (loopRunnables) {
+           if (!loopRunnables.isEmpty()) {
+               loopRunnables2.addAll(loopRunnables);
+               loopRunnables.clear();
+               for (Runnable r : loopRunnables2)
+                   r.run();
+               loopRunnables2.clear();
+           }
+       }
+
         synchronized (this) {
             State[][] gridArray = gridContainer.grid;
 
@@ -71,15 +94,19 @@ public class Sim {
         }
     }
 
-    public void start() {
-        if (thread != null)
-            return;
 
+
+
+    public void start() {
+        if (thread != null) {
+            System.out.println("Sim thread already started.");
+            return;
+        }
         status = "Running ...";
         thread = new Thread(() -> {
             System.out.println("Sim thread started." + thread);
             while (!Thread.currentThread().isInterrupted()) {
-                for (int i = 0; i < paintDelay; i++) {
+                for (int i = 0; i < paintDelay && !Thread.currentThread().isInterrupted(); i++) {
                     runOneStep();
                 }
 
@@ -93,24 +120,17 @@ public class Sim {
             }
             System.out.println("Sim thread done." + thread);
             thread = null;
-            monitor.processStop();
-        });
+        }, "Sim Thread");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
     }
 
 
     public void stop() {
-        if (thread != null)
-        {
+        if (thread != null) {
             thread.interrupt();
-            try {
-                thread.join(5000);
-            } catch (InterruptedException e) {
-                System.out.println("failed to exit.");
-                throw new RuntimeException(e);
-            }
-        }
+        } else
+            System.out.println("No sim thread to stop.");
     }
 
 
@@ -154,16 +174,14 @@ public class Sim {
 
 
     public void reset() {
-        stop();
         gridContainer.reset();
         loopCount = 0;
-
-        start();
     }
 
 
-
-    public boolean isRunning(){
+    public boolean isRunning() {
         return thread != null;
     }
+
+
 }

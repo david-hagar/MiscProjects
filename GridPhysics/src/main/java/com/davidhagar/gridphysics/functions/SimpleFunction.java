@@ -1,6 +1,7 @@
 package com.davidhagar.gridphysics.functions;
 
 import com.davidhagar.gridphysics.GridStats;
+import com.davidhagar.gridphysics.Sim;
 import com.davidhagar.gridphysics.State;
 import com.davidhagar.gridphysics.util.Util;
 
@@ -50,5 +51,10 @@ public class SimpleFunction implements StateFunction {
     @Override
     public JPanel getControls() {
         return new JPanel();
+    }
+
+    @Override
+    public void registerFault() {
+        Sim.getInstance().stop();
     }
 }

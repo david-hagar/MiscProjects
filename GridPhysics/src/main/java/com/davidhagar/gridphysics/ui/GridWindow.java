@@ -43,7 +43,7 @@ public class GridWindow {
             }
         });
 
-        controls.add(sim.stateFunction.getControls());
+        controls.add(sim.stateFunction.getControls(), BorderLayout.SOUTH);
     }
 
     private void createUIComponents() {

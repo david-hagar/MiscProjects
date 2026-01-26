@@ -60,15 +60,7 @@ public class ExpressionGA {
         ga.addRatedManual(ego);
     }
 
-    public void save(File file){
-
+    public SimplePopulation getPopulation() {
+        return population;
     }
-
-
-    public void load(File file){
-
-    }
-
-
-
 }

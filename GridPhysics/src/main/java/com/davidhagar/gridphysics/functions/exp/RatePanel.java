@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class RatePanel extends JPanel {
 
@@ -37,7 +38,11 @@ public class RatePanel extends JPanel {
         savebutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                expressionFunction.save();
+                try {
+                    expressionFunction.save();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
