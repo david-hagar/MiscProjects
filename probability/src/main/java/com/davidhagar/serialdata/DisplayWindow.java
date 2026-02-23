@@ -1,26 +1,63 @@
 package com.davidhagar.serialdata;
 
 
+import com.davidhagar.serialdata.gradient_shift.RotateProjector3D;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DisplayWindow extends JPanel {
 
-    private final ArrayList<int[]> values;
-    private final int maxBounds;
+    private final double[][] values;
+    private final RotateProjector3D p;
+    private double rotatingAngle = 0;
 
 
     RenderingHints rh = new RenderingHints(
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
-    public DisplayWindow(ArrayList<int[]> values, int maxBounds) {
+    public DisplayWindow(double[][] values, RotateProjector3D p) {
         this.values = values;
-        this.maxBounds = maxBounds;
+        this.p = p;
         this.setBackground(Color.BLACK);
+
+        centerValues();
+    }
+
+    private void centerValues() {
+        double[] average = new double[values[0].length];
+        for (double[] value : values) {
+            for (int i = 0; i < value.length; i++) {
+                average[i] += value[i];
+            }
+        }
+
+        for (int i = 0; i < average.length; i++) {
+            average[i] /= values.length;
+        }
+
+        for (double[] value : values) {
+            for (int j = 0; j < value.length; j++) {
+                value[j] -= average[j];
+            }
+        }
+
+        double max = 0;
+        for (double[] value : values) {
+            for (int i = 0; i < value.length; i++) {
+                if(value[i] > max) {
+                    max = value[i];
+                }
+            }
+        }
+
+        for (double[] value : values) {
+            for (int j = 0; j < value.length; j++) {
+                value[j] /= max;
+            }
+        }
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -35,11 +72,12 @@ public class DisplayWindow extends JPanel {
 //        g2d.setColor(Color.GRAY);
 //        g2d.drawLine(0,0, 100,100);
 
-        if (values.get(0).length == 2)
+        if (values[0].length == 2)
             paint2D(g2d);
 
-        if (values.get(0).length == 3)
+        else if (values[0].length == 3)
             paint3D(g2d);
+        else throw new IllegalArgumentException("values.length != 2 or 3");
 
     }
 
@@ -62,63 +100,42 @@ public class DisplayWindow extends JPanel {
     }
 */
 
-    public static void projectPoint(int[] point3d, int[] point2d, double distance) {
-
-        double x = point3d[0];
-        double y = point3d[1];
-        double z = point3d[2];
-
-        double radX = Math.PI / 6;
-        double ny = y * Math.cos(radX) - z * Math.sin(radX);
-        double nz = y * Math.sin(radX) + z * Math.cos(radX);
-        y=ny;
-        z=nz;
-
-        double radY = Math.PI / 6;
-        double nx = x * Math.cos(radY) + z * Math.sin(radY);
-        nz = -x * Math.sin(radY) + z * Math.cos(radY);
-        x=nx;
-        z=nz;
-
-        double scale = 60;
-        double offset = 300;
-
-        double projectionFactor = distance / (distance + z);
-        point2d[0] = (int) (x * projectionFactor * scale + offset);
-        point2d[1] = (int) (y * projectionFactor * scale + offset);
-    }
-
 
     private void paint3D(Graphics2D g2d) {
-        Dimension size = this.getSize();
+        rotatingAngle += Math.PI / 10000;
 
-        int[] point2d = {0, 0};
-        int[] last2d = {0, 0};
+        double[] point2d = {0, 0};
+        double[] last2d = {0, 0};
 
         //g2d.drawLine(-100,-100,100,100);
         //g2d.fillRect(100, 100, 10, -10);
 
-        projectPoint(values.get(values.size() - 1), last2d, 10);
-        for (int i = 0; i < values.size(); i++) {
-            int[] v = values.get(i);
+        Dimension windowDim = this.getSize();
+        p.centerOnWindow(windowDim);
 
-            projectPoint(v, point2d, 30);
+        p.projectPoint(values[values.length - 1], last2d);
+        for (int i = 0; i < values.length; i++) {
+            double[] v = values[i];
 
-            float hue = i/(float)values.size();
+            p.setRot(Math.PI/6, rotatingAngle);
+            p.projectPoint(v, point2d);
+
+            float hue = i / (float) values.length;
 //            g2d.setColor(Color.GRAY);
             g2d.setColor(Color.getHSBColor(hue, 1, 1));
-            g2d.drawLine(point2d[0], point2d[1], last2d[0], last2d[1]);
+            g2d.drawLine((int) point2d[0], (int) point2d[1], (int) last2d[0], (int) last2d[1]);
 
             //g2d.setColor(Color.RED);
             //g2d.fillRect((int) (v[0] *s), (int) (v[1]*-s), 4, 4);
 
             //g2d.drawString(Arrays.toString(v), (int) (v[0] *s), (int) (v[1]*-s));
-            int[] tmp = last2d;
+            double[] tmp = last2d;
             last2d = point2d;
             point2d = tmp;
 
             //System.out.println(Arrays.toString(point2d));
         }
+        this.repaint();
     }
 
     private void paint2D(Graphics2D g2d) {
@@ -128,11 +145,9 @@ public class DisplayWindow extends JPanel {
 
         AffineTransform t = g2d.getTransform();
         //AffineTransform tCopy = (AffineTransform) t.clone();
-        final int tx = margin;
-        final int ty = size.height - margin;
-        t.translate(tx, ty);
-        int minSize = Math.min(size.width, size.height);
-        final double s = (minSize - margin * 2) / ((double) maxBounds);
+        t.translate(size.width/2f, size.height/2f);
+        int minWinDim = Math.min(size.width, size.height);
+        final double s = (minWinDim/2f - margin * 2) ;
         //t.scale(s, -s);
         g2d.setColor(Color.GRAY);
         g2d.setTransform(t);
@@ -140,8 +155,8 @@ public class DisplayWindow extends JPanel {
         //g2d.drawLine(-100,-100,100,100);
         //g2d.fillRect(100, 100, 10, -10);
 
-        int[] last = values.get(values.size() - 1);
-        for (int[] v : values) {
+        double[] last = values[values.length - 1];
+        for (double[] v : values) {
             //System.out.println(Arrays.toString(v));
             g2d.setColor(Color.GRAY);
             g2d.drawLine((int) (v[0] * s), (int) (v[1] * -s), (int) (last[0] * s), (int) (last[1] * -s));
@@ -155,10 +170,10 @@ public class DisplayWindow extends JPanel {
     }
 
 
-    public static void openFrame(ArrayList<int[]> values, int maxBounds) {
+    public static void openFrame(double[][] values, int maxBounds, RotateProjector3D p) {
         JFrame frame = new JFrame("Display");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new DisplayWindow(values, maxBounds));
+        frame.add(new DisplayWindow(values, p));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int margin = 100;
         screenSize.height -= margin * 2;

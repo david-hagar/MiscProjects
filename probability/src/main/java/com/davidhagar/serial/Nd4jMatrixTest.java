@@ -4,7 +4,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 
-public class MatrixTest {
+public class Nd4jMatrixTest {
 
 
     public static void main(String[] args) {

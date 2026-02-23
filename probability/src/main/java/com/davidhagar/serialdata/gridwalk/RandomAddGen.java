@@ -1,4 +1,4 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.gridwalk;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -40,7 +40,7 @@ public class RandomAddGen {
         }
     }
 
-    public ArrayList<int[]> generate() {
+    public ArrayList<double[]> generate() {
 
         ArrayList<int[]> sequence = new ArrayList<>();
 
@@ -71,8 +71,21 @@ public class RandomAddGen {
         }
 
 
-        return sequence;
+        return convert(sequence);
     }
+
+    private ArrayList<double[]> convert(ArrayList<int[]> sequence){
+        ArrayList<double[]> result = new ArrayList<>();
+        for (int i = 0; i < sequence.size(); i++) {
+            int[] v = sequence.get(i);
+            double[] newV = new double[v.length];
+            for (int j = 0; j < v.length; j++)
+                newV[j] = v[j];
+            result.add(newV);
+        }
+        return result;
+    }
+
 
     private ArrayList<int[]> expand(ArrayList<int[]> sequence) {
 

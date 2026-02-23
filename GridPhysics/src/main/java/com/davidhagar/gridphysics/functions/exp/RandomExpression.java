@@ -4,9 +4,7 @@ import com.davidhagar.gridphysics.functions.exp.op.Expression;
 import com.davidhagar.gridphysics.functions.exp.op.bin.*;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.Constant;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.GridValue;
-import com.davidhagar.gridphysics.functions.exp.op.unary.Square;
-import com.davidhagar.gridphysics.functions.exp.op.unary.SquareRoot;
-import com.davidhagar.gridphysics.functions.exp.op.unary.UnaryOpp;
+import com.davidhagar.gridphysics.functions.exp.op.unary.*;
 import com.davidhagar.gridphysics.util.RandomUtil;
 import com.davidhagar.gridphysics.util.WeightedRandomSelector;
 
@@ -106,7 +104,29 @@ public class RandomExpression {
                 return new Square();
             }
         }, 1);
+
+        unaryOppSelector.add(new UnaryOppGen() {
+            @Override
+            public UnaryOpp getInstance() {
+                return new Ramp();
+            }
+        }, 1);
+
+        unaryOppSelector.add(new UnaryOppGen() {
+            @Override
+            public UnaryOpp getInstance() {
+                return new Sin();
+            }
+        }, 1);
+
+        unaryOppSelector.add(new UnaryOppGen() {
+            @Override
+            public UnaryOpp getInstance() {
+                return new Sigmoid();
+            }
+        }, 1);
     }
+
 
 
     public Expression getRandomExpression() {

@@ -6,8 +6,7 @@ import com.davidhagar.gridphysics.functions.exp.ga.ExpressionMutator;
 import com.davidhagar.gridphysics.functions.exp.op.bin.*;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.Constant;
 import com.davidhagar.gridphysics.functions.exp.op.leaf.GridValue;
-import com.davidhagar.gridphysics.functions.exp.op.unary.Square;
-import com.davidhagar.gridphysics.functions.exp.op.unary.SquareRoot;
+import com.davidhagar.gridphysics.functions.exp.op.unary.*;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -30,7 +29,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = GridValue.class, name = "GridValue"),
 
         @JsonSubTypes.Type(value = Square.class, name = "Square"),
-        @JsonSubTypes.Type(value = SquareRoot.class, name = "SquareRoot")
+        @JsonSubTypes.Type(value = SquareRoot.class, name = "SquareRoot"),
+        @JsonSubTypes.Type(value = Ramp.class, name = "Ramp"),
+        @JsonSubTypes.Type(value = Sigmoid.class, name = "Sigmoid"),
+        @JsonSubTypes.Type(value = Sin.class, name = "Sin")
 })
 public interface Expression {
     float eval(State[][] grid, int i, int j);

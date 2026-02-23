@@ -63,8 +63,9 @@ public class RenderPanel extends JPanel {
             g2d.drawString( Integer.toString( loopCountCopy), 10,offset);
             g2d.drawString( "min = " + Arrays.toString( gridStats.min ), 10,offset + spacing);
             g2d.drawString( "max = " + Arrays.toString( gridStats.max ), 10,offset + spacing *2);
+            g2d.drawString( "ave = " +  gridStats.average , 10,offset + spacing *3);
             g2d.setColor(new Color(255,200,200));
-            g2d.drawString( Sim.getInstance().isRunning()? "Running":"Stopped", 10,offset + spacing *4);
+            g2d.drawString( Sim.getInstance().isRunning()? "Running":"Stopped", 10,offset + spacing *5);
             g2d.drawString( Sim.getInstance().status, 10,offset + spacing *5);
         }
 

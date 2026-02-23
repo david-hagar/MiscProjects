@@ -1,6 +1,6 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.gridwalk;
 
-public class NestedArrays {
+public class NestedArrays<T> {
 
     private final int nDim;
     private final int sizeOfEachDim;
@@ -24,7 +24,7 @@ public class NestedArrays {
 
 
 
-    public Boolean get( int[] v){
+    public T get( int[] v){
 
         Object[] o = getLastArray(v);
 
@@ -32,7 +32,7 @@ public class NestedArrays {
         if(index >= sizeOfEachDim)
             throw new IndexOutOfBoundsException("index out of bounds, index=" + index + " max=" + sizeOfEachDim + " dimension=" +index);
 
-        return (Boolean) o[index];
+        return (T) o[index];
     }
 
     public void set( int[] v, Boolean value){

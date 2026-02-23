@@ -6,6 +6,8 @@ public class Monitor {
 
     Sim sim;
     private int historySize = 10;
+
+    double lastAveValue = -1;
 //    private ArrayBlockingQueue<GridStats> history = new ArrayBlockingQueue<>(historySize);
 
 
@@ -45,7 +47,8 @@ public class Monitor {
                 registerFault("gridStats.max[" + s + "] > " + MAX_Value);
             } else if (gridStats.min[s] == gridStats.max[s]) {
                 minMaxEqualCount++;
-            }
+            } else if (lastAveValue == gridStats.average)
+                registerFault("gridStats.average is same");
 
         }
 
@@ -68,6 +71,9 @@ public class Monitor {
 //                e.printStackTrace();
 //            }
 //        }
+
+
+        lastAveValue = gridStats.average;
     }
 
 //    private GridStats getHistoryStats() {

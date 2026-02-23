@@ -45,7 +45,12 @@ public class ExpressionFunction implements StateFunction {
         ratePanel = new RatePanel(this);
         updateExpressionDisplay();
 
-        load();
+        if( getFile().exists())
+            load();
+        else
+            System.out.println("skipping load.");
+
+        System.out.println("pop size = " + expressionGA.getPopulation().getSize());
     }
 
     @Override
@@ -160,7 +165,7 @@ public class ExpressionFunction implements StateFunction {
 
     public void save() throws IOException {
         expressionGA.getPopulation().toExpressionContainer().save(getFile());
-        System.out.println("saved.");
+        System.out.println("saved. size = " + expressionGA.getPopulation().getSize());
     }
 
     private File getFile() {
@@ -177,6 +182,7 @@ public class ExpressionFunction implements StateFunction {
                 e.printStackTrace();
             }
         }
+
     }
 
     Expression getWaveFunction() {

@@ -37,8 +37,6 @@ public class Sim {
     }
 
 
-
-
     public static Sim makeSimple() {
         SimpleFunction f = new SimpleFunction();
         return new Sim(f);
@@ -58,22 +56,22 @@ public class Sim {
         return globalInstance;
     }
 
-    public void runInMainLoop(Runnable r){
-       synchronized (loopRunnables) {
-           loopRunnables.add(r);
-       }
+    public void runInMainLoop(Runnable r) {
+        synchronized (loopRunnables) {
+            loopRunnables.add(r);
+        }
     }
 
     public void runOneStep() {
-       synchronized (loopRunnables) {
-           if (!loopRunnables.isEmpty()) {
-               loopRunnables2.addAll(loopRunnables);
-               loopRunnables.clear();
-               for (Runnable r : loopRunnables2)
-                   r.run();
-               loopRunnables2.clear();
-           }
-       }
+        synchronized (loopRunnables) {
+            if (!loopRunnables.isEmpty()) {
+                loopRunnables2.addAll(loopRunnables);
+                loopRunnables.clear();
+                for (Runnable r : loopRunnables2)
+                    r.run();
+                loopRunnables2.clear();
+            }
+        }
 
         synchronized (this) {
             State[][] gridArray = gridContainer.grid;
@@ -93,8 +91,6 @@ public class Sim {
             loopCount++;
         }
     }
-
-
 
 
     public void start() {
@@ -156,7 +152,7 @@ public class Sim {
             min[s] = firstStateValue[s];
             max[s] = firstStateValue[s];
         }
-
+        double total = 0;
         for (int s = 0; s < stateSize; s++) {
             for (State[] states : gridContainer.grid)
                 for (State state : states) {
@@ -165,9 +161,13 @@ public class Sim {
                         min[s] = v;
                     if (max[s] < v)
                         max[s] = v;
+                    total += v;
                 }
+
         }
-        GridStats gridStats = new GridStats(min, max);
+
+        total /= gridContainer.grid.length * gridContainer.grid[0].length;
+        GridStats gridStats = new GridStats(min, max, total);
         monitor.checkForExit(gridStats);
         return gridStats;
     }
@@ -176,6 +176,10 @@ public class Sim {
     public void reset() {
         gridContainer.reset();
         loopCount = 0;
+        if (!status.isEmpty() && status.charAt(0) == '<')
+            status = "";
+        else
+            status = "<" + status;
     }
 
 
