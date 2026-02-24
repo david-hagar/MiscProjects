@@ -102,7 +102,7 @@ public class DisplayWindow extends JPanel {
 
 
     private void paint3D(Graphics2D g2d) {
-        rotatingAngle += Math.PI / 10000;
+        rotatingAngle -= Math.PI / 10000;
 
         double[] point2d = {0, 0};
         double[] last2d = {0, 0};
