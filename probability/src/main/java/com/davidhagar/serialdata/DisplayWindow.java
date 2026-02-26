@@ -1,7 +1,7 @@
 package com.davidhagar.serialdata;
 
 
-import com.davidhagar.serialdata.gradient_shift.RotateProjector3D;
+import com.davidhagar.serialdata.math.RotateProjector3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +12,7 @@ public class DisplayWindow extends JPanel {
     private final double[][] values;
     private final RotateProjector3D p;
     private double rotatingAngle = 0;
+    private long lastRepaintTime = System.currentTimeMillis();
 
 
     RenderingHints rh = new RenderingHints(
@@ -102,7 +103,11 @@ public class DisplayWindow extends JPanel {
 
 
     private void paint3D(Graphics2D g2d) {
-        rotatingAngle -= Math.PI / 10000;
+        long now = System.currentTimeMillis();
+        long elapsedMillis = now - lastRepaintTime;
+        lastRepaintTime = now;
+
+        rotatingAngle -= Math.PI * elapsedMillis /1000.0/10;
 
         double[] point2d = {0, 0};
         double[] last2d = {0, 0};
@@ -170,7 +175,7 @@ public class DisplayWindow extends JPanel {
     }
 
 
-    public static void openFrame(double[][] values, int maxBounds, RotateProjector3D p) {
+    public static void openFrame(double[][] values, RotateProjector3D p) {
         JFrame frame = new JFrame("Display");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new DisplayWindow(values, p));

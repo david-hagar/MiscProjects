@@ -1,4 +1,4 @@
-package com.davidhagar.serialdata.gradient_shift;
+package com.davidhagar.serialdata.math;
 
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -7,7 +7,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 
 public class Reduce4Dto3D {
-    public static double[][] reduce(double[][] data) {
+    public static double[][] reduce(double[][] data) { // PCA PCI
         // Assume data[N][4] is your 4D data
         RealMatrix matrix = new Array2DRowRealMatrix(data);
 

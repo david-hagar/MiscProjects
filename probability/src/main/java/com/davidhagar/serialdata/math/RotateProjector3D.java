@@ -1,4 +1,4 @@
-package com.davidhagar.serialdata.gradient_shift;
+package com.davidhagar.serialdata.math;
 
 import java.awt.*;
 
@@ -13,13 +13,14 @@ public class RotateProjector3D {
     double radY = Math.PI / 6;
     double scale2D;
     double viewDistance;
+    double windowCenterScaleAdjust;
 
-
-    public RotateProjector3D(double radX, double radY, double scale2D, double viewDistance) {
+    public RotateProjector3D(double radX, double radY, double scale2D, double viewDistance, double windowCenterScaleAdjust) {
         this.radX = radX;
         this.radY = radY;
         this.scale2D = scale2D;
         this.viewDistance = viewDistance;
+        this.windowCenterScaleAdjust = windowCenterScaleAdjust;
         setRot(radX, radY);
      }
 
@@ -57,6 +58,6 @@ public class RotateProjector3D {
         xOffset2D = windowDim.width / 2.0;
         yOffset2D = windowDim.height / 2.0;
 
-        scale2D = Math.min(windowDim.width , windowDim.height ) /4f;
+        scale2D = Math.min(windowDim.width , windowDim.height ) * windowCenterScaleAdjust;
     }
 }

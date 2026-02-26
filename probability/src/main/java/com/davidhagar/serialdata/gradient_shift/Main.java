@@ -1,6 +1,8 @@
 package com.davidhagar.serialdata.gradient_shift;
 
 import com.davidhagar.serialdata.DisplayWindow;
+import com.davidhagar.serialdata.math.Reduce4Dto3D;
+import com.davidhagar.serialdata.math.RotateProjector3D;
 
 public class Main {
 
@@ -13,9 +15,9 @@ public class Main {
         if( nDim == 4)
             v = Reduce4Dto3D.reduce(v);
 
-        RotateProjector3D p = new RotateProjector3D(0, Math.PI / 6 , 1, 30);
+        RotateProjector3D p = new RotateProjector3D(0, Math.PI / 6 , 1, 30, 0.25);
 
-        DisplayWindow.openFrame(v, nStepsPerDimension, p);
+        DisplayWindow.openFrame(v, p);
 
     }
 }
