@@ -107,7 +107,7 @@ public class DisplayWindow extends JPanel {
         long elapsedMillis = now - lastRepaintTime;
         lastRepaintTime = now;
 
-        rotatingAngle -= Math.PI * elapsedMillis /1000.0/10;
+        rotatingAngle -= Math.PI * elapsedMillis /1000.0/50;
 
         double[] point2d = {0, 0};
         double[] last2d = {0, 0};
@@ -122,7 +122,7 @@ public class DisplayWindow extends JPanel {
         for (int i = 0; i < values.length; i++) {
             double[] v = values[i];
 
-            p.setRot(Math.PI/6, rotatingAngle);
+            p.setRot(p.getRadX(), rotatingAngle);
             p.projectPoint(v, point2d);
 
             float hue = i / (float) values.length;

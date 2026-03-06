@@ -3,17 +3,20 @@ package com.davidhagar.serialdata.tree;
 import com.davidhagar.serialdata.math.RotationMatrixUtil;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealMatrixFormat;
+import org.apache.commons.math3.util.CompositeFormat;
 
 import java.util.ArrayList;
 
 public class TreePath {
+    private static final RealMatrixFormat format = new RealMatrixFormat("{", "}", "{", "}", ",\r\n", ",", CompositeFormat.getDefaultNumberFormat());
 
     private final RealMatrix points;
     private final RealMatrix scale;
     private final int nDim;
     private final double rootLength;
     private final double sideOffsetFraction;
-     private final double stopDistance;
+    private final double stopDistance;
     private final RealMatrix plus90Rot[];
     private final RealMatrix minus90Rot[];
 
@@ -30,18 +33,22 @@ public class TreePath {
             plus90Rot[i] = RotationMatrixUtil.getRotationMatrix(nDim, i, ip1, Math.PI / 2);
             minus90Rot[i] = RotationMatrixUtil.getRotationMatrix(nDim, i, ip1, -Math.PI / 2);
 
+//            System.out.println(i);
+//            System.out.println(format.format(plus90Rot[i]));
+//            System.out.println(format.format(minus90Rot[i]));
+//            System.out.println();
         }
 
-        points = MatrixUtils.createRealMatrix(nDim, 5);
+        points = MatrixUtils.createRealMatrix(nDim, 4);
         double offset = rootLength * sideOffsetFraction;
         points.setEntry(0, 0, rootLength - offset);
-        points.setEntry(0, 1, rootLength + offset);
-        points.setEntry(0, 2, rootLength - offset);
         points.setEntry(1, 0, +offset);
+        points.setEntry(0, 1, rootLength + offset);
         points.setEntry(1, 1, 0);
+        points.setEntry(0, 2, rootLength - offset);
         points.setEntry(1, 2, -offset);
 
-        points.setEntry(0, 4, rootLength);
+        points.setEntry(0, 3, rootLength);
 
         scale = MatrixUtils.createRealIdentityMatrix(nDim).scalarMultiply(lengthShortenFraction);
     }
@@ -50,8 +57,8 @@ public class TreePath {
         ArrayList<double[]> list = new ArrayList<>();
 
         double sideOffsetLen = sideOffsetFraction * rootLength;
-        double [] v1 = new double[nDim];
-        v1[1] =  sideOffsetLen;
+        double[] v1 = new double[nDim];
+        v1[1] = sideOffsetLen;
         list.add(v1);
 
         double[] root = new double[nDim];
@@ -59,8 +66,8 @@ public class TreePath {
         RealMatrix identity = MatrixUtils.createRealIdentityMatrix(nDim);
         generateR(list, 0, root, identity);
 
-        double [] v2 = new double[nDim];
-        v2[1] =  -sideOffsetLen;
+        double[] v2 = new double[nDim];
+        v2[1] = -sideOffsetLen;
         list.add(v2);
 
         double[][] values = new double[list.size()][nDim];
@@ -72,28 +79,29 @@ public class TreePath {
     }
 
     private void generateR(ArrayList<double[]> list, int dimIndex, double[] root, RealMatrix rotMatrix) {
-        int dimIndexP1 = (dimIndex - 1 + nDim) % nDim;
+        int dimIndexP1 = (dimIndex + 1 + nDim) % nDim;
         System.out.println(dimIndex + " " + dimIndexP1);
+        System.out.println(format.format(rotMatrix));
 
         RealMatrix newPoints = rotMatrix.multiply(points);
-        double[] rootLengthOffset = newPoints.getColumn(4);
+        double[] rootLengthOffset = newPoints.getColumn(3);
         double[] newRoot = add(rootLengthOffset, root);
         double m = magSqr(rootLengthOffset);
-        if( m < stopDistance * stopDistance)
+        if (m < stopDistance * stopDistance)
             return;
 
         double[] br = add(newPoints.getColumn(0), root);
         double[] tm = add(newPoints.getColumn(1), root);
         double[] bl = add(newPoints.getColumn(2), root);
 
-        RealMatrix scaledRotMatrix = rotMatrix.multiply(scale);
+        RealMatrix scaledRotMatrix = scale .multiply(rotMatrix);
 
         list.add(br);
-        RealMatrix right = scaledRotMatrix.multiply(plus90Rot[dimIndex]);
+        RealMatrix right = plus90Rot[dimIndex].multiply(scaledRotMatrix);
         generateR(list, dimIndexP1, newRoot, right);
 
         list.add(tm);
-        RealMatrix left = scaledRotMatrix.multiply(minus90Rot[dimIndex]);
+        RealMatrix left = minus90Rot[dimIndex].multiply(scaledRotMatrix);
         generateR(list, dimIndexP1, newRoot, left);
         list.add(bl);
 
@@ -170,7 +178,6 @@ public class TreePath {
             list.add(sideOffsetB);
         }
      */
-
 
 
 }

@@ -10,7 +10,7 @@ public class Main {
         TreePath treePath = new TreePath(3,10, 0.3, 0.8, 5);
         double[][] path = treePath.generate();
 
-        RotateProjector3D p = new RotateProjector3D(Math.PI / 12, Math.PI / 6, 40, 5, 0.4);
+        RotateProjector3D p = new RotateProjector3D(Math.PI/4, 0, 40, 5, 0.4);
 
 
         if( path[0].length == 4)

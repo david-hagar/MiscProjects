@@ -24,6 +24,14 @@ public class RotateProjector3D {
         setRot(radX, radY);
      }
 
+    public double getRadX() {
+        return radX;
+    }
+
+    public double getRadY() {
+        return radY;
+    }
+
     public void setRot(double radX, double radY) {
         cosRadX = Math.cos(radX);
         sinRadX = Math.sin(radX);
