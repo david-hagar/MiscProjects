@@ -1,13 +1,13 @@
 package com.davidhagar.serialdata;
 
-import com.davidhagar.serialdata.math.RotationMatrixUtil;
+import com.davidhagar.serialdata.math.MatrixUtil;
 import junit.framework.TestCase;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealMatrixFormat;
 import org.apache.commons.math3.util.CompositeFormat;
 
-public class RotationMatrixUtilTest extends TestCase {
+public class MatrixUtilTest extends TestCase {
 
     public void testGetRotationMatrix() {
 
@@ -17,8 +17,8 @@ public class RotationMatrixUtilTest extends TestCase {
                 {7, 8, 9}};
         RealMatrix data = new Array2DRowRealMatrix(a);
 
-        RealMatrix r1 = RotationMatrixUtil.getRotationMatrix(3, 1, 2, Math.PI / 2);
-        RealMatrix r2 = RotationMatrixUtil.getRotationMatrix(3, 2, 1, -Math.PI / 2);
+        RealMatrix r1 = MatrixUtil.getRotationMatrix(3, 1, 2, Math.PI / 2);
+        RealMatrix r2 = MatrixUtil.getRotationMatrix(3, 2, 1, -Math.PI / 2);
 
         RealMatrix res1 = r1.multiply(data);
         RealMatrix res2 = r2.multiply(data);

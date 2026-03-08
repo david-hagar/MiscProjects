@@ -107,7 +107,7 @@ public class DisplayWindow extends JPanel {
         long elapsedMillis = now - lastRepaintTime;
         lastRepaintTime = now;
 
-        rotatingAngle -= Math.PI * elapsedMillis /1000.0/50;
+        rotatingAngle -= Math.PI * elapsedMillis /1000.0/10;
 
         double[] point2d = {0, 0};
         double[] last2d = {0, 0};
@@ -127,7 +127,7 @@ public class DisplayWindow extends JPanel {
 
             float hue = i / (float) values.length;
 //            g2d.setColor(Color.GRAY);
-            g2d.setColor(Color.getHSBColor(hue, 1, 1));
+            g2d.setColor(Color.getHSBColor(hue, 0.5f, 1));
             g2d.drawLine((int) point2d[0], (int) point2d[1], (int) last2d[0], (int) last2d[1]);
 
             //g2d.setColor(Color.RED);
