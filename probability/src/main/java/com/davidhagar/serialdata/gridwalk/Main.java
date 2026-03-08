@@ -1,6 +1,7 @@
 package com.davidhagar.serialdata.gridwalk;
 
 import com.davidhagar.serialdata.DisplayWindow;
+import com.davidhagar.serialdata.SmoothingGenerators;
 import com.davidhagar.serialdata.math.Reduce4Dto3D;
 import com.davidhagar.serialdata.math.RotateProjector3D;
 
@@ -13,15 +14,21 @@ public class Main {
         RandomAddGen rag = new RandomAddGen(3, nStepsPerDimension, 100);
         ArrayList<double[]> seq = rag.generate();
 
-        RotateProjector3D p = new RotateProjector3D(Math.PI / 12, Math.PI / 6, 1, 30, 0.25);
+        RotateProjector3D p = new RotateProjector3D(Math.PI / 12, Math.PI / 6, 1, 30, 0.35);
 
-        double[][] convert = convert(seq);
+        double[][] path = convert(seq);
 
-        if( convert[0].length == 4)
-            convert = Reduce4Dto3D.reduce(convert);
+        for (int i = 0; i < 2; i++) {
+            path = SmoothingGenerators.addMidpoints(path);
+            path = SmoothingGenerators.smooth(path, 0.5);
+        }
 
 
-        DisplayWindow.openFrame(convert, p);
+        if( path[0].length == 4)
+            path = Reduce4Dto3D.reduce(path);
+
+
+        DisplayWindow.openFrame(path, p);
 
     }
 
