@@ -2,8 +2,8 @@ package com.davidhagar.prob.variable;
 
 public interface RandomVariable {
 
-    public double next();
+    double next();
 
 
-    public ProbabilityDensity getProbabilityDensity(int nBins);
+    ProbabilityDensity getProbabilityDensity(int nBins);
 }

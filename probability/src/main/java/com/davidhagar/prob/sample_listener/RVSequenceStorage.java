@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 public class RVSequenceStorage implements SampleListener {
 
-    DoubleArrayList store;
+    final DoubleArrayList store;
 
     public RVSequenceStorage(int capacity) {
 

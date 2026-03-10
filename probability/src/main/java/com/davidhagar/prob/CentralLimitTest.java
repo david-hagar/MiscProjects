@@ -8,7 +8,7 @@ import com.davidhagar.prob.variable.RandomVariable;
 public class CentralLimitTest {
 
     private final RandomVariable randomVariable;
-    private int nSamples = 100000;
+    private final int nSamples = 100000;
 
     public CentralLimitTest(RandomVariable randomVariable) {
         this.randomVariable = randomVariable;
@@ -40,7 +40,7 @@ public class CentralLimitTest {
             double varMean = varianceStorage.getMean();
             double varVar = varianceStorage.getVariance(varMean);
 
-            System.out.println("sampleeSize = " + sampleSize + " mean mean = " + meanMean + " meanVar = " + meanVar +
+            System.out.println("sampleSize = " + sampleSize + " mean mean = " + meanMean + " meanVar = " + meanVar +
                     " varMean = " + varMean + " varVar = " + varVar + " varMean/sampleSize = " + varMean/(sampleSize));
         }
 

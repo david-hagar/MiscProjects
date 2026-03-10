@@ -3,7 +3,7 @@ package com.davidhagar.prob.variable;
 public class Poisson implements RandomVariable {
 
 
-    private double lambda;
+    private final double lambda;
 
     public Poisson(double lambda) {
         this.lambda = lambda;
@@ -22,17 +22,6 @@ public class Poisson implements RandomVariable {
 
         return k - 1;
     }
-
-
-    public static int getBinomial(int n, double p) {
-        int x = 0;
-        for (int i = 0; i < n; i++) {
-            if (Math.random() < p)
-                x++;
-        }
-        return x;
-    }
-
 
     public ProbabilityDensity getProbabilityDensity(int nBins) {
         return null;

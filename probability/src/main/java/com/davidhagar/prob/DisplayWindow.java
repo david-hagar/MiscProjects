@@ -7,7 +7,7 @@ import java.awt.*;
 public class DisplayWindow extends JPanel {
 
     int maxIndex = -1;
-    RenderingHints rh = new RenderingHints(
+    final RenderingHints rh = new RenderingHints(
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
     private double[][] values;

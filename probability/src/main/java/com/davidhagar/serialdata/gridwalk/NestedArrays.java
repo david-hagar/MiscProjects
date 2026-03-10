@@ -4,12 +4,12 @@ public class NestedArrays<T> {
 
     private final int nDim;
     private final int sizeOfEachDim;
-    Object[] stor;
+    final Object[] store;
 
     public NestedArrays(int nDim, int sizeOfEachDim) {
         this.nDim = nDim;
         this.sizeOfEachDim = sizeOfEachDim;
-        stor = make(nDim, sizeOfEachDim);
+        store = make(nDim, sizeOfEachDim);
     }
 
     public Object[] make(int nDim, int sizeOfEachDim){
@@ -32,6 +32,7 @@ public class NestedArrays<T> {
         if(index >= sizeOfEachDim)
             throw new IndexOutOfBoundsException("index out of bounds, index=" + index + " max=" + sizeOfEachDim + " dimension=" +index);
 
+        //noinspection unchecked
         return (T) o[index];
     }
 
@@ -47,7 +48,7 @@ public class NestedArrays<T> {
         if(v.length != nDim)
             throw new IndexOutOfBoundsException("dimension length does not match, actual=" + v.length + " expected=" + nDim);
 
-        Object [] o = stor;
+        Object [] o = store;
         for (int i = 0; i < v.length-1; i++) {
             final int index = v[i];
             if(index >= sizeOfEachDim)

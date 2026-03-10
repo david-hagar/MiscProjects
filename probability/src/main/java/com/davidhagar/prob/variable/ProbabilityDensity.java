@@ -2,9 +2,9 @@ package com.davidhagar.prob.variable;
 
 public class ProbabilityDensity {
 
-    double min;
-    double max;
-    double[] values;
+    final double min;
+    final double max;
+    final double[] values;
 
 
     public ProbabilityDensity(double min, double max, int bins) {
@@ -44,12 +44,12 @@ public class ProbabilityDensity {
         return -1;
     }
 
-    public void visit(PDFVistor vistor) {
+    public void visit(PDFVisitor visitor) {
 
         double binWidth = getBinWidth();
         for (int i = 0; i < values.length; i++) {
             double x = binIndexToXMin(i);
-            vistor.visit(x, x + binWidth, values[i]);
+            visitor.visit(x, x + binWidth, values[i]);
         }
     }
 
@@ -58,7 +58,7 @@ public class ProbabilityDensity {
     }
 
 
-    public interface PDFVistor {
-        public void visit(double xMin, double xMax, double probability);
+    public interface PDFVisitor {
+        void visit(double xMin, double xMax, double probability);
     }
 }

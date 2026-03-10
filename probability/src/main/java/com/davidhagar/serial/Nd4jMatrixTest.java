@@ -13,8 +13,8 @@ public class Nd4jMatrixTest {
         //INDArray nd = Nd4j.create(new float[400],new int[]{2,200});
         int n = 300 * 1000 * 1000;
         long t1 = System.currentTimeMillis();
-        INDArray nd1 = Nd4j.rand(new int[]{2, n});
-        INDArray nd2 = Nd4j.rand(new int[]{2, n});
+        INDArray nd1 = Nd4j.rand(2, n);
+        INDArray nd2 = Nd4j.rand(2, n);
         //nd.putScalar(1,1);
         System.out.println("create = " + (System.currentTimeMillis() - t1));
         System.out.println(nd1);

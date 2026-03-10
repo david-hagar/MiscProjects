@@ -28,7 +28,7 @@ public class ProbabilityDensityTest extends TestCase {
                 {2.0, 3.0, 0},
                 {3.0, 4.0, 0}
         };
-        pd.visit(new ProbabilityDensity.PDFVistor() {
+        pd.visit(new ProbabilityDensity.PDFVisitor() {
             int i=0;
             @Override
             public void visit(double xMin, double xMax, double probability) {

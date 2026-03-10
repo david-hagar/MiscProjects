@@ -15,7 +15,7 @@ public class DisplayWindow extends JPanel {
     private long lastRepaintTime = System.currentTimeMillis();
 
 
-    RenderingHints rh = new RenderingHints(
+    final RenderingHints rh = new RenderingHints(
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -47,10 +47,9 @@ public class DisplayWindow extends JPanel {
 
         double max = 0;
         for (double[] value : values) {
-            for (int i = 0; i < value.length; i++) {
-                if(value[i] > max) {
-                    max = value[i];
-                }
+            for (double v : value) {
+                if (v > max)
+                    max = v;
             }
         }
 
@@ -61,7 +60,6 @@ public class DisplayWindow extends JPanel {
         }
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -69,9 +67,6 @@ public class DisplayWindow extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHints(rh);
-
-//        g2d.setColor(Color.GRAY);
-//        g2d.drawLine(0,0, 100,100);
 
         if (values[0].length == 2)
             paint2D(g2d);
@@ -81,25 +76,6 @@ public class DisplayWindow extends JPanel {
         else throw new IllegalArgumentException("values.length != 2 or 3");
 
     }
-
-/*
-
-    public void rotateX(double angle) {
-        double rad = Math.toRadians(angle);
-        double newY = y * Math.cos(rad) - z * Math.sin(rad);
-        double newZ = y * Math.sin(rad) + z * Math.cos(rad);
-        y = newY;
-        z = newZ;
-    }
-
-    public void rotateY(double angle) {
-        double rad = Math.toRadians(angle);
-        double newX = x * Math.cos(rad) + z * Math.sin(rad);
-        double newZ = -x * Math.sin(rad) + z * Math.cos(rad);
-        x = newX;
-        z = newZ;
-    }
-*/
 
 
     private void paint3D(Graphics2D g2d) {
@@ -112,9 +88,6 @@ public class DisplayWindow extends JPanel {
         double[] point2d = {0, 0};
         double[] last2d = {0, 0};
 
-        //g2d.drawLine(-100,-100,100,100);
-        //g2d.fillRect(100, 100, 10, -10);
-
         Dimension windowDim = this.getSize();
         p.centerOnWindow(windowDim);
 
@@ -126,20 +99,13 @@ public class DisplayWindow extends JPanel {
             p.projectPoint(v, point2d);
 
             float hue = i / (float) values.length;
-//            g2d.setColor(Color.GRAY);
             g2d.setColor(Color.getHSBColor(hue, 0.5f, 1));
             g2d.drawLine((int) point2d[0], (int) point2d[1], (int) last2d[0], (int) last2d[1]);
 
-            //g2d.setColor(Color.RED);
-            //g2d.fillRect((int) (v[0] *s), (int) (v[1]*-s), 4, 4);
-
-            //g2d.drawString(Arrays.toString(v), (int) (v[0] *s), (int) (v[1]*-s));
             double[] tmp = last2d;
             last2d = point2d;
             point2d = tmp;
-
-            //System.out.println(Arrays.toString(point2d));
-        }
+         }
         this.repaint();
     }
 
@@ -157,19 +123,10 @@ public class DisplayWindow extends JPanel {
         g2d.setColor(Color.GRAY);
         g2d.setTransform(t);
 
-        //g2d.drawLine(-100,-100,100,100);
-        //g2d.fillRect(100, 100, 10, -10);
-
         double[] last = values[values.length - 1];
         for (double[] v : values) {
-            //System.out.println(Arrays.toString(v));
             g2d.setColor(Color.GRAY);
             g2d.drawLine((int) (v[0] * s), (int) (v[1] * -s), (int) (last[0] * s), (int) (last[1] * -s));
-
-            //g2d.setColor(Color.RED);
-            //g2d.fillRect((int) (v[0] *s), (int) (v[1]*-s), 4, 4);
-
-            //g2d.drawString(Arrays.toString(v), (int) (v[0] *s), (int) (v[1]*-s));
             last = v;
         }
     }

@@ -40,7 +40,7 @@ public class NSum implements RandomVariable {
 
 
         if(depth >0){
-            varPD.visit(new ProbabilityDensity.PDFVistor() {
+            varPD.visit(new ProbabilityDensity.PDFVisitor() {
                 @Override
                 public void visit(double xMin, double xMax, double probability) {
                     RecurseSum thisSum = new RecurseSum(rs);
@@ -51,7 +51,7 @@ public class NSum implements RandomVariable {
             });
         }
         else{
-
+//todo:
         }
 
         return null;

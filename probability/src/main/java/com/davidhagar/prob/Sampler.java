@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Sampler {
 
 
-    RandomVariable randomVariable;
-    ArrayList<SampleListener> listeners = new ArrayList<>();
+    final RandomVariable randomVariable;
+    final ArrayList<SampleListener> listeners = new ArrayList<>();
 
     public Sampler(RandomVariable randomVariable) {
         this.randomVariable = randomVariable;

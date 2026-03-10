@@ -6,7 +6,7 @@ public class Histogram implements SampleListener {
     private final double min;
     private final double max;
 
-    private final int values[];
+    private final int[] values;
     private int sampleCount = 0;
 
     public Histogram(int binCount, double min, double max) {
@@ -30,7 +30,7 @@ public class Histogram implements SampleListener {
 
     public double[][] getNormalizedBins() {
 
-        double ret[][] = new double[binCount][2];
+        double[][] ret = new double[binCount][2];
 
         for (int i = 0; i < binCount; i++) {
             ret[i][0] = i / (double) binCount * (max - min) + min;

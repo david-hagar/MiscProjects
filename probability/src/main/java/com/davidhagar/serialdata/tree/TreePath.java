@@ -34,7 +34,7 @@ public class TreePath {
         );
         minus90Rot = MatrixUtil.getRotationMatrix(nDimP1, 0, 1, -Math.PI / 2).multiply(
                 MatrixUtil.getRotationMatrix(nDimP1, 1, 2, Math.PI / 2)
-        );;
+        );
 //        plus90Rot = new RealMatrix[nDim];
 //        minus90Rot = new RealMatrix[nDim];
 //        for (int i = 0; i < nDim; i++) {
@@ -105,10 +105,6 @@ public class TreePath {
 
     private void generateR(ArrayList<double[]> list, int dimIndex, RealMatrix trMatrix, int depth) {
         int dimIndexNext = (dimIndex + 1 + nDim) % nDim;
-        //System.out.println(dimIndex + " " + dimIndexNext);
-        //MatrixUtil.print(trMatrix.getData());
-        //System.out.println(format.format(trMatrix));
-
         RealMatrix newPoints = trMatrix.multiply(points);
 
         double[] br = newPoints.getColumn(0);

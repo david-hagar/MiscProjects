@@ -9,7 +9,7 @@ public class NestedArrayMatrixTest extends TestCase {
 
     public void test() {
 
-        NestedArrays<Boolean> a = new NestedArrays<Boolean>(2, 10);
+        NestedArrays<Boolean> a = new NestedArrays<>(2, 10);
 
         int[][] vList = {{2, 3}, {4, 5}, {2, 1}, {7, 7}, {9, 1}};
 

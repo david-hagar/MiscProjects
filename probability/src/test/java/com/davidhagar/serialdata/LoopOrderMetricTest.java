@@ -11,7 +11,6 @@ import static org.junit.Assert.assertArrayEquals;
 public class LoopOrderMetricTest extends TestCase {
 
 
-
     public void testMeasure2() {
 
         int[] id1 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -82,7 +81,7 @@ public class LoopOrderMetricTest extends TestCase {
 
 
     public void testOffset() {
-        int n=10;
+        int n = 10;
         assertEquals(0, offset(1, 1, n));
         assertEquals(-1, offset(1, 2, n));
         assertEquals(+1, offset(2, 1, n));
@@ -103,11 +102,11 @@ public class LoopOrderMetricTest extends TestCase {
         assertEquals(+5, offset(6, 1, n));
         assertEquals(+5, offset(1, 6, n));
 
-        assertEquals(+5, offset(6, 1, n+1));
-        assertEquals(-5, offset(1, 6, n+1));
+        assertEquals(+5, offset(6, 1, n + 1));
+        assertEquals(-5, offset(1, 6, n + 1));
 
 
-        for (int i = 0; i < n-1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             int i2 = (i + 1) % n;
             System.out.println(i + ", " + i2);
             assertEquals(-1, offset(i, i2, n));
@@ -117,7 +116,7 @@ public class LoopOrderMetricTest extends TestCase {
         System.out.println();
 
         for (int i = 0; i < 2; i++) {
-            int i2 = (9-i);
+            int i2 = (9 - i);
             System.out.println(i + ", " + i2);
             int i3 = i * 2 + 1;
             assertEquals(i3, offset(i, i2, n));
@@ -127,7 +126,7 @@ public class LoopOrderMetricTest extends TestCase {
 
     }
 
-        private static void measureFlip(int[] id1, int[] id2, double expected) {
+    private static void measureFlip(int[] id1, int[] id2, double expected) {
         System.out.println("f");
         measure(id1, id2, expected);
         System.out.println("r");
@@ -143,12 +142,12 @@ public class LoopOrderMetricTest extends TestCase {
     }
 
     public void testAbsMin() {
-        testNeg1(1,2,3);
-        testNeg1(1,3,2);
-        testNeg3(3,2,1);
-        testNeg2(3,1,2);
-        testNeg3(2,3,1);
-        testNeg2(2,1,3);
+        testNeg1(1, 2, 3);
+        testNeg1(1, 3, 2);
+        testNeg3(3, 2, 1);
+        testNeg2(3, 1, 2);
+        testNeg3(2, 3, 1);
+        testNeg2(2, 1, 3);
     }
 
     private static void testNeg1(int i1, int i2, int i3) {

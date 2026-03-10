@@ -12,8 +12,8 @@ public class RotateProjector3D {
     double radX = Math.PI / 6;
     double radY = Math.PI / 6;
     double scale2D;
-    double viewDistance;
-    double windowCenterScaleAdjust;
+    final double viewDistance;
+    final double windowCenterScaleAdjust;
 
     public RotateProjector3D(double radX, double radY, double scale2D, double viewDistance, double windowCenterScaleAdjust) {
         this.radX = radX;

@@ -52,14 +52,14 @@ public class MatrixUtil {
         // f: format specifier for a floating-point number
         String formatSpecifier = "%8.2f";
 
-        for (int i = 0; i < matrix.length; i++) { // Loop through rows
+        for (double[] doubles : matrix) { // Loop through rows
             //System.out.print("}");
-            for (int j = 0; j < matrix[i].length; j++) { // Loop through columns
-                System.out.printf(formatSpecifier, matrix[i][j]);
-                if(j < matrix[i].length - 1)
+            for (int j = 0; j < doubles.length; j++) { // Loop through columns
+                System.out.printf(formatSpecifier, doubles[j]);
+                if (j < doubles.length - 1)
                     System.out.print(", ");
             }
-            System.out.println(""); // Move to the next line after each row
+            System.out.println(); // Move to the next line after each row
         }
         System.out.println();
     }

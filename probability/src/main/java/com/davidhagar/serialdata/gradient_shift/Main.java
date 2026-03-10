@@ -7,7 +7,6 @@ import com.davidhagar.serialdata.math.RotateProjector3D;
 public class Main {
 
     public static void main(String[] args) {
-        final int nStepsPerDimension = 10;
         int nDim = 3;
         GradientShiftLoopPathGen g = new GradientShiftLoopPathGen(nDim, 0.25f, 20, false);
         double[][] v = g.generate();

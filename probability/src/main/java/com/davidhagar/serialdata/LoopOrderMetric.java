@@ -5,8 +5,8 @@ import java.util.HashMap;
 public class LoopOrderMetric {
 
     public static class OrderMetric {
-        public double averageOffset;
-        public double metric;
+        public final double averageOffset;
+        public final double metric;
 
         public OrderMetric(double averageOffset, double metric) {
             this.averageOffset = averageOffset;
@@ -30,10 +30,10 @@ public class LoopOrderMetric {
         this.metric = best.metric;
     }
 
-    public OrderMetric metricF;
-    public OrderMetric metricR;
-    public OrderMetric best;
-    public double metric;
+    public final OrderMetric metricF;
+    public final OrderMetric metricR;
+    public final OrderMetric best;
+    public final double metric;
 
     public static LoopOrderMetric measure(int[] idList1, int[] idList2) {
         OrderMetric metricF = measureForward(idList1, idList2);
@@ -73,20 +73,8 @@ public class LoopOrderMetric {
         Integer otherIndex = map.get(idList2[i]);
         if (otherIndex == null)
             throw new IllegalArgumentException("id not found: " + idList2[i]);
-        int offset = offset(i, otherIndex, idList1.length);
-        return offset;
+        return offset(i, otherIndex, idList1.length);
     }
-
-//    private static int getDiff(int[] idList1, int[] idList2, HashMap<Integer, Integer> map, int i, boolean abs) {
-//        Integer otherIndex = map.get(idList2[i]);
-//        if (otherIndex == null)
-//            throw new IllegalArgumentException("id not found: " + idList2[i]);
-//        int indexDiff = i - otherIndex;
-//        if (abs)
-//            indexDiff = Math.abs(indexDiff);
-//
-//        return Math.min(indexDiff, idList1.length - indexDiff);
-//    }
 
     public static int offsetOld(int i1, int i2, int n) {
         int d = i1 - i2;

@@ -6,11 +6,11 @@ import java.util.stream.IntStream;
 public class RandomAddGen {
 
     private final int[] dimIndexes;
-    private final NestedArrays na;
+    private final NestedArrays<Integer> na;
     private final Random rand;
-    private int nDim;
-    private int maxDim;
-    private int maxIterations;
+    private final int nDim;
+    private final int maxDim;
+    private final int maxIterations;
 
 
     public RandomAddGen(int nDim, int maxDim, int maxIterations) {
@@ -21,7 +21,7 @@ public class RandomAddGen {
         this.maxIterations = maxIterations;
         //shuffleArray(dimIndexes);
 
-        na = new NestedArrays(nDim, maxDim);
+        na = new NestedArrays<>(nDim, maxDim);
 
         rand = new Random();
     }
@@ -76,8 +76,7 @@ public class RandomAddGen {
 
     private ArrayList<double[]> convert(ArrayList<int[]> sequence){
         ArrayList<double[]> result = new ArrayList<>();
-        for (int i = 0; i < sequence.size(); i++) {
-            int[] v = sequence.get(i);
+        for (int[] v : sequence) {
             double[] newV = new double[v.length];
             for (int j = 0; j < v.length; j++)
                 newV[j] = v[j];
@@ -93,7 +92,7 @@ public class RandomAddGen {
 
         ArrayList<int[]> newSeq = new ArrayList<>();
 
-        int[] last = sequence.get(sequence.size() - 1);
+        int[] last = sequence.getLast();
         for (int[] v : sequence) {
             //if (limit-- <= 0)
             //    newSeq.add(v);
@@ -123,7 +122,6 @@ public class RandomAddGen {
     }
 
     private int[][] getOpenOffset(int[] first, int[] second) {
-        int[] offset = new int[first.length];
         int[] tmp1 = new int[first.length];
         int[] tmp2 = new int[first.length];
 

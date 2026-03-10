@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 import static java.lang.Math.sin;
 
-public class ParrallelTest {
+public class ParallelTest {
 
     public static void main(String[] args) {
         int[] numbers = new int[10_000_000]; // A large array for demonstration
