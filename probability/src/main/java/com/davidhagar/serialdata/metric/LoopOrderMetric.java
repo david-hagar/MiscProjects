@@ -1,4 +1,4 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.metric;
 
 import java.util.HashMap;
 
@@ -54,27 +54,27 @@ public class LoopOrderMetric {
 
         int totalOffset = 0;
         for (int i = 0; i < idList2.length; i++) {
-            int offset = getOffset(idList1, idList2, map, i);
-
+            Integer otherIndex = map.get(idList2[i]);
+            if (otherIndex == null)
+                throw new IllegalArgumentException("id not found: " + idList2[i]);
+            int offset = offsetPos(i, otherIndex, idList1.length);
+            System.out.println(i + "=" + offset);
             totalOffset += offset;
         }
         double averageOffset = totalOffset / (double) idList1.length;
 
         double total = 0;
         for (int i = 0; i < idList2.length; i++) {
-            double offset = getOffset(idList1, idList2, map, i) - averageOffset;
+            Integer otherIndex = map.get(idList2[i]);
+            if (otherIndex == null)
+                throw new IllegalArgumentException("id not found: " + idList2[i]);
+            double offset = offset(i, otherIndex, idList1.length) - averageOffset;
             total += offset * offset;
         }
 
         return new OrderMetric(averageOffset, total / idList1.length);
     }
 
-    private static int getOffset(int[] idList1, int[] idList2, HashMap<Integer, Integer> map, int i) {
-        Integer otherIndex = map.get(idList2[i]);
-        if (otherIndex == null)
-            throw new IllegalArgumentException("id not found: " + idList2[i]);
-        return offset(i, otherIndex, idList1.length);
-    }
 
     public static int offsetOld(int i1, int i2, int n) {
         int d = i1 - i2;
@@ -88,15 +88,24 @@ public class LoopOrderMetric {
 
     public static int offset(int i1, int i2, int n) {
 
-        int d = i1 - i2 ;
+        int d = i1 - i2;
         int dnn = d - n;
         int dnp = d + n;
 
         int v = absMin(dnn, dnp, d);
-        if(n%2 == 0 && v == -n/2)
-            v=-v;
+        if (n % 2 == 0 && v == -n / 2)
+            v = -v;
 
         return v;
+    }
+
+    public static int offsetPos(int i1, int i2, int n) {
+
+        int d = i1 - i2;
+        if (d < 0)
+            d += n;
+
+        return d;
     }
 
 
@@ -110,9 +119,9 @@ public class LoopOrderMetric {
         boolean b2lt3 = i2a < i3a;
         boolean b1lt3 = i1a < i3a;
 
-        if(b1lt2 && b1lt3)
+        if (b1lt2 && b1lt3)
             return i1;
-        else if(b2lt3)
+        else if (b2lt3)
             return i2;
         else
             return i3;
@@ -120,7 +129,7 @@ public class LoopOrderMetric {
     }
 
 
-        public static int[] reverseArray(int[] originalArray) {
+    public static int[] reverseArray(int[] originalArray) {
         int[] reversedArray = new int[originalArray.length];
         int lenM1 = originalArray.length - 1;
         for (int i = 0; i < originalArray.length; i++) {

@@ -1,6 +1,5 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.gridwalk;
 
-import com.davidhagar.serialdata.gridwalk.NestedArrays;
 import junit.framework.TestCase;
 
 import java.util.Arrays;

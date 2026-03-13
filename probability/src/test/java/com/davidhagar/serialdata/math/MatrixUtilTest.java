@@ -1,6 +1,5 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.math;
 
-import com.davidhagar.serialdata.math.MatrixUtil;
 import junit.framework.TestCase;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;

@@ -1,4 +1,4 @@
-package com.davidhagar.serialdata;
+package com.davidhagar;
 
 public class PrintNumbers {
 

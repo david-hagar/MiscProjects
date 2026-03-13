@@ -1,10 +1,10 @@
-package com.davidhagar.serialdata;
+package com.davidhagar.serialdata.metric;
 
 import junit.framework.TestCase;
 
 import java.util.Arrays;
 
-import static com.davidhagar.serialdata.LoopOrderMetric.*;
+import static com.davidhagar.serialdata.metric.LoopOrderMetric.*;
 import static org.junit.Assert.assertArrayEquals;
 
 
@@ -34,7 +34,7 @@ public class LoopOrderMetricTest extends TestCase {
 
     }
 
-    private int[] offsetArray(int[] a, int i) {
+    private static int[] offsetArray(int[] a, int i) {
         int[] result = new int[a.length];
         for (int j = 0; j < a.length; j++) {
             result[(j + i + a.length) % a.length] = a[j];
@@ -67,15 +67,17 @@ public class LoopOrderMetricTest extends TestCase {
             int[] idA = {1, 2, 3, 4};
             int[] idB = {1, 2, 4, 3};
             int[] idC = {2, 1, 3, 4};
-            measure(idA, idB, 0.25);
-            measure(idA, idC, 0.25);
+            measureWithOffset(idA, idA, 0);
+            measureWithOffset(idA, idB, 0.5);
+            measureWithOffset(idA, idC, 1);
         }
         {
             int[] idA = {1, 2, 3, 4, 5};
             int[] idB = {1, 2, 4, 3, 5};
             int[] idC = {2, 1, 3, 4, 5};
-            measure(idA, idB, 0.16);
-            measure(idA, idC, 0.24);
+            measureWithOffset(idA, idA, 0.0);
+            measureWithOffset(idA, idB, 0.16);
+            measureWithOffset(idA, idC, 0.24);
         }
     }
 
@@ -139,6 +141,13 @@ public class LoopOrderMetricTest extends TestCase {
         LoopOrderMetric metric = LoopOrderMetric.measure(id1, id2);
         System.out.println(metric);
         assertEquals(expected, metric.metric, 1e-6);
+    }
+
+    private static void measureWithOffset(int[] id1, int[] id2, double expected) {
+        for (int i = 0; i < id1.length; i++) {
+            System.out.println("offset = " + i);
+            measure(  id1, offsetArray(id2, i), expected);
+        }
     }
 
     public void testAbsMin() {
