@@ -99,7 +99,7 @@ public class RenderPanel extends JPanel {
     private void draw(Graphics2D g, double screenX, double screenY) {
         g.setColor(Color.black);
 
-        int max = 150;
+        int max = 128;
         Coprimes.generateSeq(max, (a, b) -> {
 //            float mag = (float) Math.sqrt(a*a +b*b);
             //float k = max / b;
@@ -109,6 +109,8 @@ public class RenderPanel extends JPanel {
             float x = a / (float) max;
             float y = b / (float) max;
             drawCircle4(g, x, y, 1.0f/max/2);
+            //drawPoint(g, x, y, 1.0f/max/2);
+            //drawPoint(g, y, x, 1.0f/max/2);
 
 //            Point2D.Float p = circularize(b/(float)max, a/(float)max, 1);
 //            drawCircle4(g, p.x, p.y, 1.0f/max/2);
